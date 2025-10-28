@@ -13,9 +13,9 @@ interface Document {
 const mockDocuments: Document[] = [
   {
     id: "1",
-    name: "Visa Application Form",
-    status: "completed",
-    progress: 100,
+    name: "Visa Application.pdf",
+    status: "processing",
+    progress: 45,
     date: "2024-01-15",
   },
   {
@@ -34,13 +34,23 @@ const mockDocuments: Document[] = [
   },
 ];
 
-const ProgressTracker = () => {
+interface ProgressTrackerProps {
+  onVisaFormClick: () => void;
+}
+
+const ProgressTracker = ({ onVisaFormClick }: ProgressTrackerProps) => {
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold text-foreground mb-4">Your Documents</h2>
       
       {mockDocuments.map((doc) => (
-        <Card key={doc.id} className="p-6 shadow-soft bg-gradient-card border-border animate-slide-up">
+        <Card 
+          key={doc.id} 
+          className={`p-6 shadow-soft bg-gradient-card border-border animate-slide-up ${
+            doc.name === "Visa Application.pdf" ? "cursor-pointer hover:shadow-medium transition-all" : ""
+          }`}
+          onClick={() => doc.name === "Visa Application.pdf" && onVisaFormClick()}
+        >
           <div className="flex items-start gap-4">
             <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
               doc.status === "completed" ? "bg-accent/10" :
@@ -61,6 +71,9 @@ const ProgressTracker = () => {
                 <div>
                   <h3 className="font-semibold text-foreground">{doc.name}</h3>
                   <p className="text-sm text-muted-foreground">{doc.date}</p>
+                  {doc.name === "Visa Application.pdf" && (
+                    <p className="text-sm text-primary font-medium mt-1">Click to fill out form →</p>
+                  )}
                 </div>
                 <span className={`text-xs font-medium px-2 py-1 rounded-full ${
                   doc.status === "completed" ? "bg-accent/10 text-accent" :

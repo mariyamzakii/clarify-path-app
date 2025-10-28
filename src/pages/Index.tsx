@@ -4,10 +4,11 @@ import DocumentUploader from "@/components/DocumentUploader";
 import LanguageSelector from "@/components/LanguageSelector";
 import CameraCapture from "@/components/CameraCapture";
 import ProgressTracker from "@/components/ProgressTracker";
+import VisaApplicationForm from "@/components/VisaApplicationForm";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
-type View = "home" | "upload" | "camera" | "progress";
+type View = "home" | "upload" | "camera" | "progress" | "visa-form";
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<View>("home");
@@ -73,7 +74,13 @@ const Index = () => {
 
           {currentView === "progress" && (
             <div className="max-w-4xl mx-auto animate-fade-in">
-              <ProgressTracker />
+              <ProgressTracker onVisaFormClick={() => setCurrentView("visa-form")} />
+            </div>
+          )}
+
+          {currentView === "visa-form" && (
+            <div className="animate-fade-in">
+              <VisaApplicationForm />
             </div>
           )}
         </div>

@@ -30,6 +30,7 @@ const Index = () => {
         <Hero
           onUploadClick={() => setCurrentView("upload")}
           onCameraClick={() => setCurrentView("camera")}
+          onTrackClick={() => setCurrentView("progress")}
         />
       )}
 

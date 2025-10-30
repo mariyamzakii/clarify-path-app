@@ -2,85 +2,117 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here.
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
+    /* base surface + text */
     --background: 0 0% 100%;
-    --foreground: 270 50% 20%;
+    --foreground: 270 40% 20%;
 
+    /* cards / popovers */
     --card: 0 0% 100%;
-    --card-foreground: 270 50% 20%;
+    --card-foreground: 270 40% 20%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 270 50% 20%;
+    --popover-foreground: 270 40% 20%;
 
-    --primary: 270 70% 60%;
-    --primary-foreground: 0 0% 100%;
+    /* main lavender (from hwb(291 85.8% 0%) ≈ hsl(291 100% 85%)) */
+    --primary: 291 100% 85%;
+    --primary-foreground: 270 40% 20%;
 
-    --secondary: 270 20% 95%;
-    --secondary-foreground: 270 50% 20%;
+    /* light supporting surfaces in same family */
+    --secondary: 291 50% 96%;
+    --secondary-foreground: 270 40% 20%;
 
-    --muted: 270 20% 95%;
-    --muted-foreground: 270 20% 50%;
+    /* muted / subtle text + backgrounds */
+    --muted: 291 40% 97%;
+    --muted-foreground: 270 15% 45%;
 
-    --accent: 280 65% 75%;
-    --accent-foreground: 270 50% 20%;
+    /* accents — slightly stronger than primary but same hue */
+    --accent: 291 80% 90%;
+    --accent-foreground: 270 40% 20%;
 
+    /* errors stay red */
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 270 20% 90%;
-    --input: 270 20% 90%;
-    --ring: 270 70% 60%;
+    /* borders / inputs — soft lavender-gray */
+    --border: 291 30% 92%;
+    --input: 291 30% 92%;
+    --ring: 291 100% 85%;
 
     --radius: 0.75rem;
 
-    --gradient-hero: linear-gradient(135deg, hsl(270 70% 60%) 0%, hsl(280 65% 70%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(270 20% 98%) 100%);
-    
-    --shadow-soft: 0 4px 6px -1px hsl(270 70% 60% / 0.1), 0 2px 4px -1px hsl(270 70% 60% / 0.06);
-    --shadow-medium: 0 10px 15px -3px hsl(270 70% 60% / 0.1), 0 4px 6px -2px hsl(270 70% 60% / 0.05);
-    
+    /* gradients using the new palette */
+    --gradient-hero: linear-gradient(
+      135deg,
+      hsl(291 100% 85%) 0%,
+      hsl(295 80% 90%) 100%
+    );
+    --gradient-card: linear-gradient(
+      180deg,
+      hsl(0 0% 100%) 0%,
+      hsl(291 40% 97%) 100%
+    );
+
+    /* shadows tinted with the new primary */
+    --shadow-soft: 0 4px 6px -1px hsl(291 100% 85% / 0.1),
+      0 2px 4px -1px hsl(291 100% 85% / 0.06);
+    --shadow-medium: 0 10px 15px -3px hsl(291 100% 85% / 0.1),
+      0 4px 6px -2px hsl(291 100% 85% / 0.05);
+
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
+  /* "dark" here is really a soft / elevated mode to match the pastel theme */
   .dark {
-    --background: 270 40% 10%;
-    --foreground: 270 20% 98%;
+    --background: 291 20% 93%;
+    --foreground: 270 25% 15%;
 
-    --card: 270 40% 15%;
-    --card-foreground: 270 20% 98%;
+    --card: 291 25% 96%;
+    --card-foreground: 270 25% 15%;
 
-    --popover: 270 40% 15%;
-    --popover-foreground: 270 20% 98%;
+    --popover: 291 25% 96%;
+    --popover-foreground: 270 25% 15%;
 
-    --primary: 270 70% 60%;
-    --primary-foreground: 0 0% 100%;
+    /* slightly deeper lavender in dark mode so it stands out */
+    --primary: 291 70% 75%;
+    --primary-foreground: 270 25% 15%;
 
-    --secondary: 270 30% 20%;
-    --secondary-foreground: 270 20% 98%;
+    --secondary: 291 25% 90%;
+    --secondary-foreground: 270 25% 15%;
 
-    --muted: 270 30% 20%;
-    --muted-foreground: 270 20% 65%;
+    --muted: 291 20% 88%;
+    --muted-foreground: 270 15% 40%;
 
-    --accent: 280 65% 75%;
-    --accent-foreground: 270 40% 10%;
+    --accent: 291 60% 82%;
+    --accent-foreground: 270 25% 15%;
 
     --destructive: 0 63% 31%;
-    --destructive-foreground: 270 20% 98%;
+    --destructive-foreground: 291 20% 93%;
 
-    --border: 270 30% 20%;
-    --input: 270 30% 20%;
-    --ring: 270 70% 60%;
+    --border: 291 25% 85%;
+    --input: 291 25% 85%;
+    --ring: 291 70% 75%;
 
-    --gradient-hero: linear-gradient(135deg, hsl(270 70% 50%) 0%, hsl(280 65% 60%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(270 40% 15%) 0%, hsl(270 30% 20%) 100%);
-    
-    --shadow-soft: 0 4px 6px -1px hsl(0 0% 0% / 0.3), 0 2px 4px -1px hsl(0 0% 0% / 0.2);
-    --shadow-medium: 0 10px 15px -3px hsl(0 0% 0% / 0.3), 0 4px 6px -2px hsl(0 0% 0% / 0.2);
+    --gradient-hero: linear-gradient(
+      135deg,
+      hsl(291 70% 75%) 0%,
+      hsl(295 60% 82%) 100%
+    );
+    --gradient-card: linear-gradient(
+      180deg,
+      hsl(291 25% 96%) 0%,
+      hsl(291 20% 90%) 100%
+    );
+
+    --shadow-soft: 0 4px 6px -1px hsl(0 0% 0% / 0.15),
+      0 2px 4px -1px hsl(0 0% 0% / 0.08);
+    --shadow-medium: 0 10px 15px -3px hsl(0 0% 0% / 0.15),
+      0 4px 6px -2px hsl(0 0% 0% / 0.1);
   }
 }
 

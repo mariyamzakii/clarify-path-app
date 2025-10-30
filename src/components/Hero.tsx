@@ -19,14 +19,12 @@ const Hero = ({ onUploadClick, onCameraClick, onTrackClick }: HeroProps) => {
             <span className="text-sm text-white font-medium">AI-Powered Document Translation</span>
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-            Understand Complex
-            <br />
-            <span className="text-accent">Documents Instantly</span>
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+            Your Document Buddy
           </h1>
           
           <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Translate visa applications, FAFSA forms, and legal documents into your language with AI-powered clarity
+            Translate, explain and complete forms easily
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

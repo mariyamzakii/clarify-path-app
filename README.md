@@ -1,73 +1,75 @@
-# Welcome to your Lovable project
+# Documate
 
-## Project info
+**Course:** CS4352 – Introduction to Human–Computer Interaction  
+**Team #:** 6  
+**Team Name:** Innovators  
+**Team Members:** Keertana Valluru, Mariyam Zaki, Nandi Tonye  
+**Team Captain:** Mariyam Zaki  
 
-**URL**: https://lovable.dev/projects/10dd1727-1f04-4d78-abf9-99fd01d47b7d
+---
 
-## How can I edit this code?
+## Project Overview
 
-There are several ways of editing your application.
+Documate is a web application that helps users understand and complete forms such as visa applications, FAFSA, and other official documents.  
+It provides clear instructions, translation help, and progress tracking to make the process easier and more accessible for users of all backgrounds.
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/10dd1727-1f04-4d78-abf9-99fd01d47b7d) and start prompting.
+## Purpose
 
-Changes made via Lovable will be committed automatically to this repo.
+This project was created for our CS4352 class at the University of Texas at Dallas.  
+It applies Human–Computer Interaction (HCI) principles such as **usability**, **simplicity**, and **user feedback** to improve the experience of filling out complex government and academic forms.
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Tools and Technologies
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- **React (with Vite)** – for building the frontend interface  
+- **TypeScript** – for type-safe component development  
+- **Tailwind CSS** – for modern, responsive UI design  
+- **shadcn/ui** – for reusable UI components  
+- **React Query** – for managing and caching data  
+- **Supabase (optional)** – for backend services and database integration  
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## Features
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- Upload or take a photo of a document  
+- Translate and explain form fields in simple terms  
+- Track progress and completion status  
+- Fill out a guided visa application form  
+- Clean lavender-themed interface with responsive design  
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+## How to Run
+
+```
+# Step 1: Clone the repository
+git clone https://github.com/mariyamzakii/Documate.git
+
+# Step 2: Navigate into the project folder
+cd Documate
+
+# Step 3: Install dependencies
+npm install
+
+# Step 4: Start the development server
 npm run dev
+
+# Step 5: Open your browser
+# Visit the local URL shown in the terminal (usually http://localhost:5173)
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Repository
 
-**Use GitHub Codespaces**
+GitHub Repository: [https://github.com/mariyamzakii/Documate](https://github.com/mariyamzakii/Documate)
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/10dd1727-1f04-4d78-abf9-99fd01d47b7d) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### University of Texas at Dallas  
+**CS4352 – Introduction to Human–Computer Interaction (Fall 2025)**  
+**Team : Innovators**

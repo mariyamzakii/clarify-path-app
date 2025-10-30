@@ -19,94 +19,94 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 270 40% 20%;
 
-    /* main lavender (from hwb(291 85.8% 0%) ≈ hsl(291 100% 85%)) */
-    --primary: 291 100% 85%;
-    --primary-foreground: 270 40% 20%;
+    /* main lavender (from hwb(291 69.6% 7.9%) ≈ hsl(291 50% 73%)) */
+    --primary: 291 50% 73%;
+    --primary-foreground: 270 40% 15%;
 
     /* light supporting surfaces in same family */
-    --secondary: 291 50% 96%;
-    --secondary-foreground: 270 40% 20%;
+    --secondary: 291 35% 90%;
+    --secondary-foreground: 270 40% 15%;
 
     /* muted / subtle text + backgrounds */
-    --muted: 291 40% 97%;
+    --muted: 291 25% 92%;
     --muted-foreground: 270 15% 45%;
 
-    /* accents — slightly stronger than primary but same hue */
-    --accent: 291 80% 90%;
-    --accent-foreground: 270 40% 20%;
+    /* accents — slightly lighter than primary */
+    --accent: 291 45% 80%;
+    --accent-foreground: 270 40% 15%;
 
     /* errors stay red */
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    /* borders / inputs — soft lavender-gray */
-    --border: 291 30% 92%;
-    --input: 291 30% 92%;
-    --ring: 291 100% 85%;
+    /* borders / inputs — lavender-gray */
+    --border: 291 25% 88%;
+    --input: 291 25% 88%;
+    --ring: 291 50% 73%;
 
     --radius: 0.75rem;
 
     /* gradients using the new palette */
     --gradient-hero: linear-gradient(
       135deg,
-      hsl(291 100% 85%) 0%,
-      hsl(295 80% 90%) 100%
+      hsl(291 50% 73%) 0%,
+      hsl(295 45% 78%) 100%
     );
     --gradient-card: linear-gradient(
       180deg,
       hsl(0 0% 100%) 0%,
-      hsl(291 40% 97%) 100%
+      hsl(291 25% 92%) 100%
     );
 
     /* shadows tinted with the new primary */
-    --shadow-soft: 0 4px 6px -1px hsl(291 100% 85% / 0.1),
-      0 2px 4px -1px hsl(291 100% 85% / 0.06);
-    --shadow-medium: 0 10px 15px -3px hsl(291 100% 85% / 0.1),
-      0 4px 6px -2px hsl(291 100% 85% / 0.05);
+    --shadow-soft: 0 4px 6px -1px hsl(291 50% 73% / 0.1),
+      0 2px 4px -1px hsl(291 50% 73% / 0.06);
+    --shadow-medium: 0 10px 15px -3px hsl(291 50% 73% / 0.1),
+      0 4px 6px -2px hsl(291 50% 73% / 0.05);
 
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* "dark" here is really a soft / elevated mode to match the pastel theme */
+  /* soft pastel dark mode */
   .dark {
-    --background: 291 20% 93%;
-    --foreground: 270 25% 15%;
+    --background: 291 25% 20%;
+    --foreground: 291 30% 95%;
 
-    --card: 291 25% 96%;
-    --card-foreground: 270 25% 15%;
+    --card: 291 25% 25%;
+    --card-foreground: 291 30% 95%;
 
-    --popover: 291 25% 96%;
-    --popover-foreground: 270 25% 15%;
+    --popover: 291 25% 25%;
+    --popover-foreground: 291 30% 95%;
 
-    /* slightly deeper lavender in dark mode so it stands out */
-    --primary: 291 70% 75%;
-    --primary-foreground: 270 25% 15%;
+    /* slightly deeper lavender for contrast */
+    --primary: 291 50% 63%;
+    --primary-foreground: 291 30% 95%;
 
-    --secondary: 291 25% 90%;
-    --secondary-foreground: 270 25% 15%;
+    --secondary: 291 25% 35%;
+    --secondary-foreground: 291 30% 95%;
 
-    --muted: 291 20% 88%;
-    --muted-foreground: 270 15% 40%;
+    --muted: 291 25% 30%;
+    --muted-foreground: 291 20% 70%;
 
-    --accent: 291 60% 82%;
-    --accent-foreground: 270 25% 15%;
+    --accent: 291 45% 55%;
+    --accent-foreground: 291 30% 95%;
 
     --destructive: 0 63% 31%;
-    --destructive-foreground: 291 20% 93%;
+    --destructive-foreground: 291 30% 95%;
 
-    --border: 291 25% 85%;
-    --input: 291 25% 85%;
-    --ring: 291 70% 75%;
+    --border: 291 25% 30%;
+    --input: 291 25% 30%;
+    --ring: 291 50% 63%;
 
     --gradient-hero: linear-gradient(
       135deg,
-      hsl(291 70% 75%) 0%,
-      hsl(295 60% 82%) 100%
+      hsl(291 50% 63%) 0%,
+      hsl(295 45% 68%) 100%
     );
     --gradient-card: linear-gradient(
       180deg,
-      hsl(291 25% 96%) 0%,
-      hsl(291 20% 90%) 100%
+      hsl(291 25% 25%) 0%,
+      hsl(291 25% 30%) 100%
     );
 
     --shadow-soft: 0 4px 6px -1px hsl(0 0% 0% / 0.15),

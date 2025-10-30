@@ -14,6 +14,7 @@ const Index = () => {
   const [currentView, setCurrentView] = useState<View>("home");
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [visaCompleted, setVisaCompleted] = useState(false);
 
   const handleFileSelect = (file: File) => {
     setUploadedFile(file);
@@ -75,13 +76,21 @@ const Index = () => {
 
           {currentView === "progress" && (
             <div className="max-w-4xl mx-auto animate-fade-in">
-              <ProgressTracker onVisaFormClick={() => setCurrentView("visa-form")} />
+              <ProgressTracker 
+                onVisaFormClick={() => setCurrentView("visa-form")} 
+                visaCompleted={visaCompleted}
+              />
             </div>
           )}
 
           {currentView === "visa-form" && (
             <div className="animate-fade-in">
-              <VisaApplicationForm />
+              <VisaApplicationForm 
+                onSubmit={() => {
+                  setVisaCompleted(true);
+                  setCurrentView("progress");
+                }}
+              />
             </div>
           )}
         </div>

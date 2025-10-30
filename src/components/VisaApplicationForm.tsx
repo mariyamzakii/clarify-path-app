@@ -5,8 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import ChatBot from "./ChatBot";
+import { useToast } from "@/hooks/use-toast";
 
-const VisaApplicationForm = () => {
+interface VisaApplicationFormProps {
+  onSubmit: () => void;
+}
+
+const VisaApplicationForm = ({ onSubmit }: VisaApplicationFormProps) => {
+  const { toast } = useToast();
   const [selectedText, setSelectedText] = useState("");
   const [showChatBot, setShowChatBot] = useState(false);
   const [chatBotPosition, setChatBotPosition] = useState({ x: 0, y: 0 });
@@ -22,16 +28,25 @@ const VisaApplicationForm = () => {
     }
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Form filled successfully!",
+      description: "Your visa application has been sent to Travel.state.gov",
+    });
+    setTimeout(() => {
+      onSubmit();
+    }, 1500);
+  };
+
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Visa Application Form</h1>
-        <Button variant="outline" onClick={() => window.history.back()}>
-          Back to Progress
-        </Button>
       </div>
 
-      <Card className="p-6 space-y-6">
+      <form onSubmit={handleSubmit}>
+        <Card className="p-6 space-y-6">
         <div className="space-y-4">
           <h2 className="text-xl font-semibold">Personal Information</h2>
           
@@ -39,7 +54,7 @@ const VisaApplicationForm = () => {
             <Label className="cursor-text select-text">
               Full Legal Name (as shown on passport)
             </Label>
-            <Input placeholder="Enter your full legal name" />
+            <Input />
             <p className="text-sm text-muted-foreground select-text">
               This must match exactly with your passport. Include all names in the order they appear.
             </p>
@@ -55,7 +70,7 @@ const VisaApplicationForm = () => {
 
           <div className="space-y-2" onMouseUp={(e) => handleTextSelect("Place of Birth", e)}>
             <Label className="cursor-text select-text">Place of Birth</Label>
-            <Input placeholder="City, Country" />
+            <Input />
             <p className="text-sm text-muted-foreground select-text">
               Enter the city and country where you were born.
             </p>
@@ -63,7 +78,7 @@ const VisaApplicationForm = () => {
 
           <div className="space-y-2" onMouseUp={(e) => handleTextSelect("Nationality", e)}>
             <Label className="cursor-text select-text">Nationality/Citizenship</Label>
-            <Input placeholder="Your nationality" />
+            <Input />
             <p className="text-sm text-muted-foreground select-text">
               List all countries where you hold citizenship.
             </p>
@@ -75,7 +90,7 @@ const VisaApplicationForm = () => {
           
           <div className="space-y-2" onMouseUp={(e) => handleTextSelect("Purpose of Visit", e)}>
             <Label className="cursor-text select-text">Purpose of Visit</Label>
-            <Textarea placeholder="Describe the purpose of your visit" />
+            <Textarea />
             <p className="text-sm text-muted-foreground select-text">
               Clearly state why you are traveling. Common purposes include tourism, business meetings, 
               visiting family, or attending conferences.
@@ -84,7 +99,7 @@ const VisaApplicationForm = () => {
 
           <div className="space-y-2" onMouseUp={(e) => handleTextSelect("Intended Duration", e)}>
             <Label className="cursor-text select-text">Intended Duration of Stay</Label>
-            <Input placeholder="Number of days" type="number" />
+            <Input type="number" />
             <p className="text-sm text-muted-foreground select-text">
               Specify how many days you plan to stay in the destination country.
             </p>
@@ -96,7 +111,7 @@ const VisaApplicationForm = () => {
           
           <div className="space-y-2" onMouseUp={(e) => handleTextSelect("Current Employer", e)}>
             <Label className="cursor-text select-text">Current Employer Name</Label>
-            <Input placeholder="Company/Organization name" />
+            <Input />
             <p className="text-sm text-muted-foreground select-text">
               Enter the full legal name of your current employer or "Self-employed" if applicable.
             </p>
@@ -104,7 +119,7 @@ const VisaApplicationForm = () => {
 
           <div className="space-y-2" onMouseUp={(e) => handleTextSelect("Job Title", e)}>
             <Label className="cursor-text select-text">Job Title/Position</Label>
-            <Input placeholder="Your current position" />
+            <Input />
             <p className="text-sm text-muted-foreground select-text">
               Your official job title at your current place of employment.
             </p>
@@ -119,7 +134,7 @@ const VisaApplicationForm = () => {
               </div>
               <div>
                 <Label className="text-sm">End Date</Label>
-                <Input type="date" placeholder="Present if current" />
+                <Input type="date" />
               </div>
             </div>
             <p className="text-sm text-muted-foreground select-text">
@@ -128,10 +143,11 @@ const VisaApplicationForm = () => {
           </div>
         </div>
 
-        <Button className="w-full" size="lg">
-          Save Progress
-        </Button>
-      </Card>
+          <Button type="submit" className="w-full" size="lg">
+            Submit Application
+          </Button>
+        </Card>
+      </form>
 
       {showChatBot && (
         <ChatBot

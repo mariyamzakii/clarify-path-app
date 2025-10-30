@@ -40,9 +40,10 @@ const mockDocuments: Document[] = [
 
 interface ProgressTrackerProps {
   onVisaFormClick: () => void;
+  visaCompleted?: boolean;
 }
 
-const ProgressTracker = ({ onVisaFormClick }: ProgressTrackerProps) => {
+const ProgressTracker = ({ onVisaFormClick, visaCompleted = false }: ProgressTrackerProps) => {
   const [documents, setDocuments] = useState<Document[]>(mockDocuments);
   const [newDocName, setNewDocName] = useState("");
   const [newDocType, setNewDocType] = useState("");
@@ -118,46 +119,53 @@ const ProgressTracker = ({ onVisaFormClick }: ProgressTrackerProps) => {
         </Card>
       )}
       
-      {documents.map((doc) => (
-        <Card 
-          key={doc.id} 
-          className={`p-4 sm:p-6 shadow-soft bg-gradient-card border-border animate-slide-up ${
-            doc.name.includes("Visa Application") ? "cursor-pointer hover:shadow-medium transition-all" : ""
-          }`}
-          onClick={() => doc.name.includes("Visa Application") && onVisaFormClick()}
-        >
-          <div className="flex items-start gap-4">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-              doc.status === "completed" ? "bg-accent/10" :
-              doc.status === "processing" ? "bg-primary/10" :
-              "bg-muted"
-            }`}>
-              {doc.status === "completed" ? (
-                <CheckCircle2 className="w-5 h-5 text-accent" />
-              ) : doc.status === "processing" ? (
-                <Clock className="w-5 h-5 text-primary animate-spin" />
-              ) : (
-                <FileText className="w-5 h-5 text-muted-foreground" />
-              )}
-            </div>
+      {documents.map((doc) => {
+        const isVisaApp = doc.name.includes("Visa Application");
+        const displayStatus = isVisaApp && visaCompleted ? "completed" : doc.status;
+        
+        return (
+          <Card 
+            key={doc.id} 
+            className={`p-4 sm:p-6 shadow-soft bg-gradient-card border-border animate-slide-up ${
+              isVisaApp ? "cursor-pointer hover:shadow-medium transition-all" : ""
+            }`}
+            onClick={() => isVisaApp && onVisaFormClick()}
+          >
+            <div className="flex items-start gap-4">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                displayStatus === "completed" ? "bg-accent/10" :
+                displayStatus === "processing" ? "bg-primary/10" :
+                "bg-muted"
+              }`}>
+                {displayStatus === "completed" ? (
+                  <CheckCircle2 className="w-5 h-5 text-accent" />
+                ) : displayStatus === "processing" ? (
+                  <Clock className="w-5 h-5 text-primary animate-spin" />
+                ) : (
+                  <FileText className="w-5 h-5 text-muted-foreground" />
+                )}
+              </div>
 
-            <div className="flex-1 min-w-0">
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <div className="flex-1">
-                  <h3 className="font-semibold text-foreground">{doc.name}</h3>
-                  <p className="text-sm text-muted-foreground">{doc.date}</p>
-                  {doc.name.includes("Visa Application") && (
-                    <p className="text-sm text-primary font-medium mt-1">Click to fill out form →</p>
-                  )}
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className={`text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap ${
-                    doc.status === "completed" ? "bg-accent/10 text-accent" :
-                    doc.status === "processing" ? "bg-primary/10 text-primary" :
-                    "bg-muted text-muted-foreground"
-                  }`}>
-                    {doc.status.charAt(0).toUpperCase() + doc.status.slice(1)}
-                  </span>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-foreground">{doc.name}</h3>
+                    <p className="text-sm text-muted-foreground">{doc.date}</p>
+                    {isVisaApp && !visaCompleted && (
+                      <p className="text-sm text-primary font-medium mt-1">Click to fill out form →</p>
+                    )}
+                    {isVisaApp && visaCompleted && (
+                      <p className="text-sm text-accent font-medium mt-1">✓ Form submitted to Travel.state.gov</p>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap ${
+                      displayStatus === "completed" ? "bg-accent/10 text-accent" :
+                      displayStatus === "processing" ? "bg-primary/10 text-primary" :
+                      "bg-muted text-muted-foreground"
+                    }`}>
+                      {displayStatus.charAt(0).toUpperCase() + displayStatus.slice(1)}
+                    </span>
                   <Button
                     variant="ghost"
                     size="icon"
@@ -172,16 +180,17 @@ const ProgressTracker = ({ onVisaFormClick }: ProgressTrackerProps) => {
                 </div>
               </div>
 
-              {doc.status === "processing" && (
-                <div className="space-y-1">
-                  <Progress value={doc.progress} className="h-2" />
-                  <p className="text-xs text-muted-foreground">{doc.progress}% complete</p>
-                </div>
-              )}
+                {displayStatus === "processing" && (
+                  <div className="space-y-1">
+                    <Progress value={doc.progress} className="h-2" />
+                    <p className="text-xs text-muted-foreground">{doc.progress}% complete</p>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </Card>
-      ))}
+          </Card>
+        );
+      })}
     </div>
   );
 };

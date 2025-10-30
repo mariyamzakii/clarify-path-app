@@ -19,11 +19,15 @@ const Hero = ({ onUploadClick, onCameraClick, onTrackClick }: HeroProps) => {
             <span className="text-sm text-white font-medium">AI-Powered Document Translation</span>
           </div>
           
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            Your Document Buddy
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 leading-tight">
+            Documate
           </h1>
           
-          <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-accent font-semibold mb-6">
+            Your Document Buddy
+          </p>
+          
+          <p className="text-lg md:text-xl text-white/90 mb-12 max-w-2xl mx-auto leading-relaxed">
             Translate, explain and complete forms easily
           </p>
           

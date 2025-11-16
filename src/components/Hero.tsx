@@ -2,12 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Upload, Camera, FileText } from "lucide-react";
 
 interface HeroProps {
-  onUploadClick: () => void;
-  onCameraClick: () => void;
-  onTrackClick: () => void;
+  onLoginClick: () => void;
 }
 
-const Hero = ({ onUploadClick, onCameraClick, onTrackClick }: HeroProps) => {
+const Hero = ({ onLoginClick }: HeroProps) => {
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-hero">
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLW9wYWNpdHk9Ii4xIi8+PC9nPjwvc3ZnPg==')] opacity-20"></div>
@@ -31,34 +29,13 @@ const Hero = ({ onUploadClick, onCameraClick, onTrackClick }: HeroProps) => {
             Translate, explain and complete forms easily
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex justify-center">
             <Button 
               size="lg"
-              onClick={onUploadClick}
-              className="bg-accent hover:bg-accent/90 text-accent-foreground shadow-medium min-w-[200px] h-14 text-lg font-semibold transition-all hover:scale-105"
+              onClick={onLoginClick}
+              className="bg-accent hover:bg-accent/90 text-accent-foreground shadow-medium min-w-[250px] h-16 text-xl font-bold transition-all hover:scale-105"
             >
-              <Upload className="w-5 h-5 mr-2" />
-              Upload Document
-            </Button>
-            
-            <Button 
-              size="lg"
-              variant="outline"
-              onClick={onCameraClick}
-              className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-white/30 min-w-[200px] h-14 text-lg font-semibold transition-all hover:scale-105"
-            >
-              <Camera className="w-5 h-5 mr-2" />
-              Take Photo
-            </Button>
-
-            <Button 
-              size="lg"
-              variant="outline"
-              onClick={onTrackClick}
-              className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-white/30 min-w-[200px] h-14 text-lg font-semibold transition-all hover:scale-105"
-            >
-              <FileText className="w-5 h-5 mr-2" />
-              Track Documents
+              Log In
             </Button>
           </div>
           

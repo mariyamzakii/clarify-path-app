@@ -9,9 +9,23 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { messages } = await req.json();
+    const { messages, language = "en" } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+
+    const languageNames: Record<string, string> = {
+      en: "English",
+      es: "Spanish (Español)",
+      zh: "Chinese (中文)",
+      ar: "Arabic (العربية)",
+      hi: "Hindi (हिन्दी)",
+      pt: "Portuguese (Português)",
+      fr: "French (Français)",
+      de: "German (Deutsch)",
+    };
+
+    const languageName = languageNames[language] || "English";
+    const systemPrompt = `You are a helpful AI assistant for form filling and translation. Always respond in ${languageName}. Keep answers clear and concise.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -22,7 +36,7 @@ serve(async (req) => {
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
         messages: [
-          { role: "system", content: "You are a helpful AI assistant for form filling and translation. Keep answers clear and concise." },
+          { role: "system", content: systemPrompt },
           ...(Array.isArray(messages) ? messages : []),
         ],
         stream: false,

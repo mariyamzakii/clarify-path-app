@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import ChatBot from "./ChatBot";
+import FormHelper from "./FormHelper";
 import { useToast } from "@/hooks/use-toast";
 
 interface VisaApplicationFormProps {
@@ -44,6 +45,8 @@ const VisaApplicationForm = ({ onSubmit }: VisaApplicationFormProps) => {
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Visa Application Form</h1>
       </div>
+      
+      <FormHelper />
 
       <form onSubmit={handleSubmit}>
         <Card className="p-6 space-y-6">

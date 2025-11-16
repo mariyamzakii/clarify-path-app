@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import FormHelper from "./FormHelper";
 import { useToast } from "@/hooks/use-toast";
 
 interface FAFSAFormProps {
@@ -25,6 +26,8 @@ const FAFSAForm = ({ onSubmit }: FAFSAFormProps) => {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <h1 className="text-3xl font-bold">FAFSA Application</h1>
+      
+      <FormHelper />
 
       <form onSubmit={handleSubmit}>
         <Card className="p-6 space-y-6">

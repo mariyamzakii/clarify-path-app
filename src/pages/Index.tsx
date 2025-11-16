@@ -2,6 +2,7 @@ import { useState } from "react";
 import Hero from "@/components/Hero";
 import LoginForm from "@/components/LoginForm";
 import Header from "@/components/Header";
+import MainMenu from "@/components/MainMenu";
 import DocumentSelector from "@/components/DocumentSelector";
 import DocumentUploader from "@/components/DocumentUploader";
 import LanguageSelector from "@/components/LanguageSelector";
@@ -9,10 +10,11 @@ import CameraCapture from "@/components/CameraCapture";
 import ProgressTracker from "@/components/ProgressTracker";
 import VisaApplicationForm from "@/components/VisaApplicationForm";
 import BundleChecklist from "@/components/BundleChecklist";
+import ChatBot from "@/components/ChatBot";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
-type View = "home" | "login" | "document-select" | "upload" | "camera" | "progress" | "visa-form" | "bundle";
+type View = "home" | "login" | "main-menu" | "browse-forms" | "upload" | "camera" | "progress" | "visa-form" | "bundle" | "ai-chat";
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<View>("home");
@@ -22,13 +24,16 @@ const Index = () => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [visaCompleted, setVisaCompleted] = useState(false);
   const [selectedBundle, setSelectedBundle] = useState<string>("");
+  const [inProgressDocs, setInProgressDocs] = useState<Array<{ id: string; name: string; status: string }>>([
+    { id: "visa", name: "Visa Application", status: "In Progress" }
+  ]);
 
   const handleLogin = (email: string) => {
     const name = email.split("@")[0];
     const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
     setUserName(capitalizedName);
     setIsLoggedIn(true);
-    setCurrentView("document-select");
+    setCurrentView("main-menu");
   };
 
   const handleLogout = () => {
@@ -38,6 +43,7 @@ const Index = () => {
     setUploadedFile(null);
     setVisaCompleted(false);
     setSelectedBundle("");
+    setInProgressDocs([{ id: "visa", name: "Visa Application", status: "In Progress" }]);
   };
 
   const handleTitleDoubleClick = () => {
@@ -63,6 +69,22 @@ const Index = () => {
 
   const handleBundleSelect = (bundleType: string) => {
     setSelectedBundle(bundleType);
+    
+    // Add to in-progress if not already there
+    const bundleId = `${bundleType}-bundle`;
+    if (!inProgressDocs.find(doc => doc.id === bundleId)) {
+      const bundleNames: Record<string, string> = {
+        "citizenship": "Citizenship Forms Bundle",
+        "country-visa": "Country Visa Applications",
+        "student-package": "Student Package"
+      };
+      setInProgressDocs(prev => [...prev, { 
+        id: bundleId, 
+        name: bundleNames[bundleType] || bundleType,
+        status: "In Progress" 
+      }]);
+    }
+    
     setCurrentView("bundle");
   };
 
@@ -82,10 +104,10 @@ const Index = () => {
         <>
           <Header userName={userName} onTitleDoubleClick={handleTitleDoubleClick} />
           <div className="container mx-auto px-4 py-8">
-            {currentView !== "document-select" && (
+            {currentView !== "main-menu" && (
               <Button
                 variant="ghost"
-                onClick={() => setCurrentView("document-select")}
+                onClick={() => setCurrentView("main-menu")}
                 className="mb-6"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
@@ -93,13 +115,28 @@ const Index = () => {
               </Button>
             )}
 
-            {currentView === "document-select" && (
+            {currentView === "main-menu" && (
+              <MainMenu
+                onUploadClick={() => setCurrentView("upload")}
+                onBrowseClick={() => setCurrentView("browse-forms")}
+                onAIClick={() => setCurrentView("ai-chat")}
+              />
+            )}
+
+            {currentView === "browse-forms" && (
               <DocumentSelector
                 onUploadClick={() => setCurrentView("upload")}
                 onCameraClick={() => setCurrentView("camera")}
                 onDocumentSelect={handleDocumentSelect}
                 onBundleSelect={handleBundleSelect}
+                inProgressDocs={inProgressDocs}
               />
+            )}
+
+            {currentView === "ai-chat" && (
+              <div className="max-w-4xl mx-auto">
+                <ChatBot />
+              </div>
             )}
 
             {currentView === "upload" && (
@@ -125,7 +162,7 @@ const Index = () => {
               <div className="max-w-2xl mx-auto animate-fade-in">
                 <CameraCapture
                   onCapture={handleCapture}
-                  onClose={() => setCurrentView("document-select")}
+                  onClose={() => setCurrentView("browse-forms")}
                 />
               </div>
             )}
@@ -158,7 +195,7 @@ const Index = () => {
                     console.log("Opening form:", formId);
                     setCurrentView("visa-form");
                   }}
-                  onBack={() => setCurrentView("document-select")}
+                  onBack={() => setCurrentView("browse-forms")}
                 />
               </div>
             )}

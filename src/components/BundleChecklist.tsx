@@ -41,8 +41,8 @@ const BundleChecklist = ({ bundleName, onFormClick, onBack }: BundleChecklistPro
         ];
       case "student-package":
         return [
-          { id: "fafsa", name: "FAFSA Application", completed: false },
-          { id: "student-visa", name: "F-1 Student Visa Application", completed: false },
+          { id: "fafsa", name: "FAFSA Application", completed: true },
+          { id: "student-visa", name: "F-1 Student Visa Application", completed: true },
           { id: "i-20", name: "I-20 Form from School", completed: false },
         ];
       default:

@@ -171,10 +171,10 @@ const GenericForm = ({ formName, formType, onSubmit }: GenericFormProps) => {
             <defs>
               <path id="curve" d="M 10,40 Q 60,5 110,40" fill="transparent" />
             </defs>
-            <text className="text-xs font-medium fill-primary">
-              <textPath href="#curve" startOffset="50%" textAnchor="middle">
-                Need help?
-              </textPath>
+              <text className="text-xs font-medium fill-primary">
+                <textPath href="#curve" startOffset="50%" textAnchor="middle">
+                  Need translation help?
+                </textPath>
             </text>
           </svg>
           <div className="bg-primary hover:bg-primary/90 text-primary-foreground p-4 rounded-full shadow-elegant hover:shadow-glow transition-all">

@@ -22,7 +22,7 @@ const ChatBot = ({ selectedText = "", onClose, onHighlightField }: ChatBotProps)
   const [input, setInput] = useState("");
   const [language, setLanguage] = useState("en");
   const [isTyping, setIsTyping] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   const languages = [
     { code: "en", name: "English" },
@@ -82,22 +82,49 @@ const ChatBot = ({ selectedText = "", onClose, onHighlightField }: ChatBotProps)
       setMessages([userMessage]);
       
       setIsTyping(true);
-      setTimeout(() => {
-        const response = getMockResponse(selectedText, language);
-        const assistantMessage: Message = { role: "assistant", content: response };
-        setMessages([userMessage, assistantMessage]);
-        setIsTyping(false);
-      }, 1000);
+      fetchChat([userMessage])
+        .then((content) => {
+          setMessages([userMessage, { role: "assistant", content }]);
+        })
+        .catch(() => {
+          const fallback = getMockResponse(selectedText, language);
+          setMessages([userMessage, { role: "assistant", content: fallback }]);
+        })
+        .finally(() => setIsTyping(false));
     }
   }, [selectedText, language]);
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages]);
 
-  const handleSend = () => {
+  const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
+
+  async function fetchChat(msgs: Message[]): Promise<string> {
+    try {
+      const resp = await fetch(CHAT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({ messages: msgs }),
+      });
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({} as any));
+        throw new Error((err as any)?.error || `Request failed (${resp.status})`);
+      }
+      const data = await resp.json();
+      const content = (data as any)?.choices?.[0]?.message?.content || (data as any)?.content;
+      if (!content) throw new Error("Empty response");
+      return content as string;
+    } catch (e) {
+      console.error("AI error:", e);
+      throw e;
+    }
+  }
+
+  const handleSend = async () => {
     if (!input.trim()) return;
 
     const userMessage: Message = { role: "user", content: input };
@@ -105,12 +132,15 @@ const ChatBot = ({ selectedText = "", onClose, onHighlightField }: ChatBotProps)
     setInput("");
 
     setIsTyping(true);
-    setTimeout(() => {
+    try {
+      const aiText = await fetchChat([...messages, userMessage]);
+      setMessages(prev => [...prev, { role: "assistant", content: aiText }]);
+    } catch {
       const response = getMockResponse(input, language);
-      const assistantMessage: Message = { role: "assistant", content: response };
-      setMessages(prev => [...prev, assistantMessage]);
+      setMessages(prev => [...prev, { role: "assistant", content: response }]);
+    } finally {
       setIsTyping(false);
-    }, 1000);
+    }
   };
 
   const handleQuickTranslate = () => {
@@ -122,7 +152,7 @@ const ChatBot = ({ selectedText = "", onClose, onHighlightField }: ChatBotProps)
   };
 
   return (
-    <Card className="fixed bottom-6 right-6 w-96 max-h-[500px] shadow-2xl border-2 border-primary/20 flex flex-col z-50 animate-in slide-in-from-bottom-5 duration-300">
+    <Card className="fixed bottom-6 right-6 w-96 h-[520px] min-h-0 shadow-2xl border-2 border-primary/20 flex flex-col z-50 animate-in slide-in-from-bottom-5 duration-300">
       <div className="p-4 border-b border-border bg-gradient-to-r from-primary/10 to-accent/10 flex-shrink-0 rounded-t-lg">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
@@ -159,7 +189,7 @@ const ChatBot = ({ selectedText = "", onClose, onHighlightField }: ChatBotProps)
       )}
 
       <ScrollArea className="flex-1 p-4 h-[400px]">
-        <div className="space-y-3">
+        <div className="space-y-3 p-4">
           {messages.length === 0 && (
             <div className="text-center text-muted-foreground text-sm py-8">
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -197,20 +227,11 @@ const ChatBot = ({ selectedText = "", onClose, onHighlightField }: ChatBotProps)
               </div>
             </div>
           )}
+          <div ref={bottomRef} />
         </div>
       </ScrollArea>
 
       <div className="p-3 border-t border-border space-y-2 flex-shrink-0 bg-background/50">
-        {messages.length > 0 && messages[messages.length - 1]?.role === "assistant" && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleQuickTranslate}
-            className="w-full text-xs h-8"
-          >
-            🌍 Translate this to {languages.find(l => l.code === language)?.name}
-          </Button>
-        )}
         
         <div className="flex gap-2">
           <Input

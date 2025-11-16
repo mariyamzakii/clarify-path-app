@@ -31,30 +31,24 @@ const languages = [
 
 const LanguageSelector = ({ selectedLanguage, onLanguageChange }: LanguageSelectorProps) => {
   return (
-    <Card className="p-6 shadow-soft bg-gradient-card border-border">
-      <div className="space-y-4">
-        <div className="flex items-center gap-2 mb-4">
-          <Languages className="w-5 h-5 text-primary" />
-          <h3 className="text-lg font-semibold text-foreground">Select Your Language</h3>
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="language" className="text-foreground">Translate to</Label>
-          <Select value={selectedLanguage} onValueChange={onLanguageChange}>
-            <SelectTrigger id="language" className="w-full bg-background border-border">
-              <SelectValue placeholder="Select a language" />
-            </SelectTrigger>
-            <SelectContent>
-              {languages.map((lang) => (
-                <SelectItem key={lang.code} value={lang.code}>
-                  {lang.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-    </Card>
+    <div className="space-y-2">
+      <Label htmlFor="language" className="text-sm text-foreground flex items-center gap-2">
+        <Languages className="w-4 h-4 text-primary" />
+        Translate to
+      </Label>
+      <Select value={selectedLanguage} onValueChange={onLanguageChange}>
+        <SelectTrigger id="language" className="w-full bg-background border-border">
+          <SelectValue placeholder="Select a language" />
+        </SelectTrigger>
+        <SelectContent>
+          {languages.map((lang) => (
+            <SelectItem key={lang.code} value={lang.code}>
+              {lang.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 };
 

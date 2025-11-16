@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import ChatBot from "./ChatBot";
 import FormHelper from "./FormHelper";
+import LanguageSelector from "./LanguageSelector";
 import { useToast } from "@/hooks/use-toast";
 
 interface FAFSAFormProps {
@@ -11,6 +14,19 @@ interface FAFSAFormProps {
 
 const FAFSAForm = ({ onSubmit }: FAFSAFormProps) => {
   const { toast } = useToast();
+  const [selectedText, setSelectedText] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
+
+  const handleTextSelect = () => {
+    setTimeout(() => {
+      const selection = window.getSelection();
+      const selectedContent = selection?.toString().trim();
+      
+      if (selectedContent && selectedContent.length > 0) {
+        setSelectedText(selectedContent);
+      }
+    }, 0);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,70 +40,81 @@ const FAFSAForm = ({ onSubmit }: FAFSAFormProps) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <h1 className="text-3xl font-bold">FAFSA Application</h1>
-      
-      <FormHelper />
-
-      <form onSubmit={handleSubmit}>
-        <Card className="p-6 space-y-6">
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Student Information</h2>
-            
-            <div className="space-y-2">
-              <Label>Social Security Number</Label>
-              <Input />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Date of Birth</Label>
-              <Input type="date" />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Driver's License Number (if applicable)</Label>
-              <Input />
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Parent Information</h2>
-            
-            <div className="space-y-2">
-              <Label>Parent's Name</Label>
-              <Input />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Parent's Social Security Number</Label>
-              <Input />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Parent's Date of Birth</Label>
-              <Input type="date" />
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Financial Information</h2>
-            
-            <div className="space-y-2">
-              <Label>Adjusted Gross Income</Label>
-              <Input type="number" />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Federal Taxes Paid</Label>
-              <Input type="number" />
-            </div>
-          </div>
-
-          <Button type="submit" size="lg" className="w-full">
-            Submit FAFSA Application
-          </Button>
+    <div className="flex gap-6">
+      <div className="flex-1 max-w-4xl space-y-6">
+        <h1 className="text-3xl font-bold">FAFSA Application</h1>
+        
+        <Card className="p-6 bg-gradient-card border-border">
+          <LanguageSelector 
+            selectedLanguage={selectedLanguage}
+            onLanguageChange={setSelectedLanguage}
+          />
         </Card>
-      </form>
+        
+        <FormHelper />
+
+        <form onSubmit={handleSubmit}>
+          <Card className="p-6 space-y-6" onMouseUp={handleTextSelect}>
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold">Student Information</h2>
+              
+              <div className="space-y-2">
+                <Label className="cursor-text select-text">Social Security Number</Label>
+                <Input placeholder="Enter SSN" />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="cursor-text select-text">Date of Birth</Label>
+                <Input type="date" />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="cursor-text select-text">Driver's License Number (if applicable)</Label>
+                <Input placeholder="Enter license number" />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold">Parent Information</h2>
+              
+              <div className="space-y-2">
+                <Label className="cursor-text select-text">Parent's Name</Label>
+                <Input placeholder="Enter parent's name" />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="cursor-text select-text">Parent's Social Security Number</Label>
+                <Input placeholder="Enter parent's SSN" />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="cursor-text select-text">Parent's Date of Birth</Label>
+                <Input type="date" />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold">Financial Information</h2>
+              
+              <div className="space-y-2">
+                <Label className="cursor-text select-text">Adjusted Gross Income</Label>
+                <Input type="number" placeholder="Enter amount" />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="cursor-text select-text">Federal Taxes Paid</Label>
+                <Input type="number" placeholder="Enter amount" />
+              </div>
+            </div>
+
+            <Button type="submit" size="lg" className="w-full">
+              Submit FAFSA Application
+            </Button>
+          </Card>
+        </form>
+      </div>
+      
+      <ChatBot selectedText={selectedText} />
     </div>
   );
 };

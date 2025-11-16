@@ -29,7 +29,7 @@ const LoginForm = ({ onLogin }: LoginFormProps) => {
           <Input
             id="email"
             type="email"
-            placeholder="sarah@gmail.com"
+            placeholder="Enter Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required

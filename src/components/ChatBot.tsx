@@ -35,6 +35,37 @@ const ChatBot = ({ selectedText = "", onClose, onHighlightField }: ChatBotProps)
     { code: "de", name: "Deutsch" },
   ];
 
+  const checkAndHighlightField = (userMessage: string) => {
+    const lowerMsg = userMessage.toLowerCase();
+    
+    if ((lowerMsg.includes("age") || lowerMsg.includes("date of birth") || lowerMsg.includes("birthday")) && 
+        (lowerMsg.includes("wrong") || lowerMsg.includes("incorrect") || lowerMsg.includes("error") || lowerMsg.includes("fix"))) {
+      if (onHighlightField) {
+        onHighlightField("dateOfBirth");
+      }
+    } else if (lowerMsg.includes("name") && 
+               (lowerMsg.includes("wrong") || lowerMsg.includes("incorrect") || lowerMsg.includes("error") || lowerMsg.includes("fix"))) {
+      if (onHighlightField) {
+        onHighlightField("fullName");
+      }
+    } else if (lowerMsg.includes("email") && 
+               (lowerMsg.includes("wrong") || lowerMsg.includes("incorrect") || lowerMsg.includes("error") || lowerMsg.includes("fix"))) {
+      if (onHighlightField) {
+        onHighlightField("email");
+      }
+    } else if (lowerMsg.includes("phone") && 
+               (lowerMsg.includes("wrong") || lowerMsg.includes("incorrect") || lowerMsg.includes("error") || lowerMsg.includes("fix"))) {
+      if (onHighlightField) {
+        onHighlightField("phone");
+      }
+    } else if (lowerMsg.includes("address") && 
+               (lowerMsg.includes("wrong") || lowerMsg.includes("incorrect") || lowerMsg.includes("error") || lowerMsg.includes("fix"))) {
+      if (onHighlightField) {
+        onHighlightField("address");
+      }
+    }
+  };
+
   const getMockResponse = (query: string, lang: string): string => {
     const lowerQuery = query.toLowerCase();
     
@@ -129,14 +160,18 @@ const ChatBot = ({ selectedText = "", onClose, onHighlightField }: ChatBotProps)
 
     const userMessage: Message = { role: "user", content: input };
     setMessages(prev => [...prev, userMessage]);
+    const inputText = input;
     setInput("");
+
+    // Check if user is reporting an error and highlight the field
+    checkAndHighlightField(inputText);
 
     setIsTyping(true);
     try {
       const aiText = await fetchChat([...messages, userMessage]);
       setMessages(prev => [...prev, { role: "assistant", content: aiText }]);
     } catch {
-      const response = getMockResponse(input, language);
+      const response = getMockResponse(inputText, language);
       setMessages(prev => [...prev, { role: "assistant", content: response }]);
     } finally {
       setIsTyping(false);

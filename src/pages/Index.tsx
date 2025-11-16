@@ -11,8 +11,7 @@ import ProgressTracker from "@/components/ProgressTracker";
 import VisaApplicationForm from "@/components/VisaApplicationForm";
 import BundleChecklist from "@/components/BundleChecklist";
 import ChatBot from "@/components/ChatBot";
-import FAFSAForm from "@/components/FAFSAForm";
-import StudentVisaForm from "@/components/StudentVisaForm";
+import GenericForm from "@/components/GenericForm";
 import I20Form from "@/components/I20Form";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -63,6 +62,26 @@ const Index = () => {
   };
 
   const handleDocumentSelect = (docType: string) => {
+    // Add to in-progress if not already there
+    const docNames: Record<string, string> = {
+      "visa": "Visa Application",
+      "fafsa": "FAFSA Form",
+      "student-visa": "F-1 Student Visa",
+      "i-20": "I-20 Form",
+      "passport": "Passport Renewal",
+      "tax": "Tax Forms",
+      "immigration": "Immigration Forms",
+      "work-permit": "Work Permit"
+    };
+    
+    if (!inProgressDocs.find(doc => doc.id === docType)) {
+      setInProgressDocs(prev => [...prev, { 
+        id: docType, 
+        name: docNames[docType] || docType,
+        status: "In Progress" 
+      }]);
+    }
+
     switch (docType) {
       case "visa":
         setCurrentView("visa-form");
@@ -77,7 +96,7 @@ const Index = () => {
         setCurrentView("i20-form");
         break;
       default:
-        setCurrentView("progress");
+        setCurrentView("browse-forms");
     }
   };
 
@@ -118,10 +137,10 @@ const Index = () => {
         <>
           <Header userName={userName} onTitleDoubleClick={handleTitleDoubleClick} />
           <div className="container mx-auto px-4 py-8">
-            {currentView !== "main-menu" && (
+            {currentView !== "main-menu" && currentView !== "browse-forms" && (
               <Button
                 variant="ghost"
-                onClick={() => setCurrentView("main-menu")}
+                onClick={() => setCurrentView("browse-forms")}
                 className="mb-6"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
@@ -209,7 +228,9 @@ const Index = () => {
 
             {currentView === "fafsa-form" && (
               <div className="animate-fade-in">
-                <FAFSAForm 
+                <GenericForm 
+                  formName="FAFSA Form"
+                  formType="fafsa"
                   onSubmit={() => setCurrentView("browse-forms")}
                 />
               </div>
@@ -217,7 +238,9 @@ const Index = () => {
 
             {currentView === "student-visa-form" && (
               <div className="animate-fade-in">
-                <StudentVisaForm 
+                <GenericForm 
+                  formName="F-1 Student Visa Application"
+                  formType="student-visa"
                   onSubmit={() => setCurrentView("browse-forms")}
                 />
               </div>

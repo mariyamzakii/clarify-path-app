@@ -1,14 +1,14 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Upload, FolderOpen, MessageSquare } from "lucide-react";
+import { Upload, FolderOpen, Camera } from "lucide-react";
 
 interface MainMenuProps {
   onUploadClick: () => void;
   onBrowseClick: () => void;
-  onAIClick: () => void;
+  onCameraClick: () => void;
 }
 
-const MainMenu = ({ onUploadClick, onBrowseClick, onAIClick }: MainMenuProps) => {
+const MainMenu = ({ onUploadClick, onBrowseClick, onCameraClick }: MainMenuProps) => {
   return (
     <div className="max-w-6xl mx-auto">
       <h2 className="text-3xl font-bold text-foreground mb-8 text-center">
@@ -49,17 +49,17 @@ const MainMenu = ({ onUploadClick, onBrowseClick, onAIClick }: MainMenuProps) =>
 
         <Card 
           className="p-8 shadow-soft bg-gradient-card border-border hover:shadow-medium transition-all cursor-pointer"
-          onClick={onAIClick}
+          onClick={onCameraClick}
         >
           <div className="flex flex-col items-center text-center space-y-4">
             <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-              <MessageSquare className="w-8 h-8 text-primary" />
+              <Camera className="w-8 h-8 text-primary" />
             </div>
-            <h3 className="text-xl font-semibold text-foreground">AI Assistant</h3>
+            <h3 className="text-xl font-semibold text-foreground">Take a Photo</h3>
             <p className="text-muted-foreground">
-              Get instant help and answers about document requirements
+              Use your camera to capture documents instantly
             </p>
-            <Button className="w-full">Ask AI</Button>
+            <Button className="w-full">Open Camera</Button>
           </div>
         </Card>
       </div>

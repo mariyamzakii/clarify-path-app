@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ChatBot from "./ChatBot";
 import FormHelper from "./FormHelper";
-import LanguageSelector from "./LanguageSelector";
+import { CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface I20FormProps {
@@ -15,7 +15,22 @@ interface I20FormProps {
 const I20Form = ({ onSubmit }: I20FormProps) => {
   const { toast } = useToast();
   const [selectedText, setSelectedText] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState("en");
+  const [showChat, setShowChat] = useState(false);
+  const [highlightedField, setHighlightedField] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    dateOfBirth: "",
+    countryOfBirth: "",
+    currentAddress: "",
+    schoolName: "",
+    schoolAddress: "",
+    admissionDate: "",
+    studentId: "",
+    degreeLevel: "",
+    major: "",
+    programStartDate: "",
+    programEndDate: "",
+  });
 
   const handleTextSelect = () => {
     setTimeout(() => {
@@ -24,8 +39,31 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
       
       if (selectedContent && selectedContent.length > 0) {
         setSelectedText(selectedContent);
+        setShowChat(true);
       }
     }, 0);
+  };
+
+  const handleCheckForm = () => {
+    const summary = `Based on your form:\n\n` +
+      `• Name: ${formData.fullName || "Not filled"}\n` +
+      `• Date of Birth: ${formData.dateOfBirth || "Not filled"}\n` +
+      `• Country of Birth: ${formData.countryOfBirth || "Not filled"}\n` +
+      `• School: ${formData.schoolName || "Not filled"}\n` +
+      `• Major: ${formData.major || "Not filled"}\n` +
+      `• Degree Level: ${formData.degreeLevel || "Not filled"}\n` +
+      `• Program Start: ${formData.programStartDate || "Not filled"}\n` +
+      `• Program End: ${formData.programEndDate || "Not filled"}`;
+    
+    setSelectedText(summary);
+    setShowChat(true);
+  };
+
+  const handleFieldUpdate = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    if (highlightedField === field) {
+      setHighlightedField(null);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -40,101 +78,152 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
   };
 
   return (
-    <div className="flex gap-6">
-      <div className="flex-1 max-w-4xl space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6">
+      <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">I-20 Form Request</h1>
-        
-        <Card className="p-6 bg-gradient-card border-border">
-          <LanguageSelector 
-            selectedLanguage={selectedLanguage}
-            onLanguageChange={setSelectedLanguage}
-          />
-        </Card>
-        
-        <FormHelper />
-
-        <form onSubmit={handleSubmit}>
-          <Card className="p-6 space-y-6" onMouseUp={handleTextSelect}>
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Student Information</h2>
-              
-              <div className="space-y-2">
-                <Label className="cursor-text select-text">Full Name</Label>
-                <Input placeholder="Enter full name" />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="cursor-text select-text">Date of Birth</Label>
-                <Input type="date" />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="cursor-text select-text">Country of Birth</Label>
-                <Input placeholder="Enter country" />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="cursor-text select-text">Current Address</Label>
-                <Input placeholder="Enter address" />
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">School Information</h2>
-              
-              <div className="space-y-2">
-                <Label className="cursor-text select-text">School Name</Label>
-                <Input placeholder="Enter school name" />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="cursor-text select-text">School Address</Label>
-                <Input placeholder="Enter school address" />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="cursor-text select-text">Admission Letter Date</Label>
-                <Input type="date" />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="cursor-text select-text">Student ID Number</Label>
-                <Input placeholder="Enter student ID" />
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Program Details</h2>
-              
-              <div className="space-y-2">
-                <Label className="cursor-text select-text">Degree Level</Label>
-                <Input placeholder="e.g., Bachelor's, Master's" />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="cursor-text select-text">Major/Field of Study</Label>
-                <Input placeholder="Enter major" />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="cursor-text select-text">Expected Program Start Date</Label>
-                <Input type="date" />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="cursor-text select-text">Expected Program End Date</Label>
-                <Input type="date" />
-              </div>
-            </div>
-
-            <Button type="submit" size="lg" className="w-full">
-              Submit I-20 Request
-            </Button>
-          </Card>
-        </form>
+        <Button onClick={handleCheckForm} variant="outline" className="gap-2">
+          <CheckCircle className="w-4 h-4" />
+          Check My Form
+        </Button>
       </div>
       
-      <ChatBot selectedText={selectedText} />
+      <FormHelper />
+
+      <form onSubmit={handleSubmit}>
+        <Card className="p-6 space-y-6" onMouseUp={handleTextSelect}>
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">Student Information</h2>
+            
+            <div className={`space-y-2 ${highlightedField === 'fullName' ? 'p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400' : ''}`}>
+              <Label className="cursor-text select-text">Full Name</Label>
+              <Input 
+                placeholder="Enter full name" 
+                value={formData.fullName}
+                onChange={(e) => handleFieldUpdate('fullName', e.target.value)}
+              />
+            </div>
+
+            <div className={`space-y-2 ${highlightedField === 'dateOfBirth' ? 'p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400' : ''}`}>
+              <Label className="cursor-text select-text">Date of Birth</Label>
+              <Input 
+                type="date" 
+                value={formData.dateOfBirth}
+                onChange={(e) => handleFieldUpdate('dateOfBirth', e.target.value)}
+              />
+            </div>
+
+            <div className={`space-y-2 ${highlightedField === 'countryOfBirth' ? 'p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400' : ''}`}>
+              <Label className="cursor-text select-text">Country of Birth</Label>
+              <Input 
+                placeholder="Enter country" 
+                value={formData.countryOfBirth}
+                onChange={(e) => handleFieldUpdate('countryOfBirth', e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="cursor-text select-text">Current Address</Label>
+              <Input 
+                placeholder="Enter address" 
+                value={formData.currentAddress}
+                onChange={(e) => handleFieldUpdate('currentAddress', e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">School Information</h2>
+            
+            <div className="space-y-2">
+              <Label className="cursor-text select-text">School Name</Label>
+              <Input 
+                placeholder="Enter school name" 
+                value={formData.schoolName}
+                onChange={(e) => handleFieldUpdate('schoolName', e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="cursor-text select-text">School Address</Label>
+              <Input 
+                placeholder="Enter school address" 
+                value={formData.schoolAddress}
+                onChange={(e) => handleFieldUpdate('schoolAddress', e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="cursor-text select-text">Admission Letter Date</Label>
+              <Input 
+                type="date" 
+                value={formData.admissionDate}
+                onChange={(e) => handleFieldUpdate('admissionDate', e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="cursor-text select-text">Student ID Number</Label>
+              <Input 
+                placeholder="Enter student ID" 
+                value={formData.studentId}
+                onChange={(e) => handleFieldUpdate('studentId', e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">Program Details</h2>
+            
+            <div className="space-y-2">
+              <Label className="cursor-text select-text">Degree Level</Label>
+              <Input 
+                placeholder="e.g., Bachelor's, Master's" 
+                value={formData.degreeLevel}
+                onChange={(e) => handleFieldUpdate('degreeLevel', e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="cursor-text select-text">Major/Field of Study</Label>
+              <Input 
+                placeholder="Enter major" 
+                value={formData.major}
+                onChange={(e) => handleFieldUpdate('major', e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="cursor-text select-text">Expected Program Start Date</Label>
+              <Input 
+                type="date" 
+                value={formData.programStartDate}
+                onChange={(e) => handleFieldUpdate('programStartDate', e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="cursor-text select-text">Expected Program End Date</Label>
+              <Input 
+                type="date" 
+                value={formData.programEndDate}
+                onChange={(e) => handleFieldUpdate('programEndDate', e.target.value)}
+              />
+            </div>
+          </div>
+
+          <Button type="submit" size="lg" className="w-full">
+            Submit I-20 Request
+          </Button>
+        </Card>
+      </form>
+
+      {showChat && (
+        <ChatBot 
+          selectedText={selectedText} 
+          onClose={() => setShowChat(false)}
+          onHighlightField={(field) => setHighlightedField(field)}
+        />
+      )}
     </div>
   );
 };

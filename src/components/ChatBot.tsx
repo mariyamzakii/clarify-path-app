@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { X, Send, Loader2, MessageSquare } from "lucide-react";
+import { X, Send, MessageSquare, Sparkles } from "lucide-react";
 
 interface Message {
   role: "user" | "assistant";
@@ -14,10 +14,10 @@ interface Message {
 interface ChatBotProps {
   selectedText?: string;
   onClose?: () => void;
-  position?: { x: number; y: number };
+  onHighlightField?: (field: string) => void;
 }
 
-const ChatBot = ({ selectedText = "", onClose, position }: ChatBotProps) => {
+const ChatBot = ({ selectedText = "", onClose, onHighlightField }: ChatBotProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [language, setLanguage] = useState("en");
@@ -27,60 +27,67 @@ const ChatBot = ({ selectedText = "", onClose, position }: ChatBotProps) => {
   const languages = [
     { code: "en", name: "English" },
     { code: "es", name: "Español" },
-    { code: "fr", name: "Français" },
-    { code: "de", name: "Deutsch" },
     { code: "zh", name: "中文" },
     { code: "ar", name: "العربية" },
     { code: "hi", name: "हिन्दी" },
     { code: "pt", name: "Português" },
+    { code: "fr", name: "Français" },
+    { code: "de", name: "Deutsch" },
   ];
 
-  // Enhanced mock responses with more comprehensive answers
   const getMockResponse = (query: string, lang: string): string => {
     const lowerQuery = query.toLowerCase();
     
-    const responses: Record<string, Record<string, string>> = {
-      explain: {
-        en: `"${selectedText}" means: This is a critical field on your application form. It requires precise and accurate information exactly as it appears on your official government-issued documents. Providing incorrect or inconsistent information can lead to delays or rejection of your application. Always verify the spelling, format, and details match your original documents like passport, birth certificate, or official records.`,
-        es: `"${selectedText}" significa: Este es un campo crítico en su formulario. Requiere información precisa y exacta tal como aparece en sus documentos oficiales emitidos por el gobierno. Proporcionar información incorrecta puede causar retrasos o rechazo.`,
-        fr: `"${selectedText}" signifie : Il s'agit d'un champ critique de votre formulaire. Il nécessite des informations précises et exactes telles qu'elles apparaissent sur vos documents officiels délivrés par le gouvernement.`,
-        de: `"${selectedText}" bedeutet: Dies ist ein kritisches Feld in Ihrem Formular. Es erfordert präzise und genaue Informationen, genau wie sie auf Ihren offiziellen Regierungsdokumenten erscheinen.`,
-        zh: `"${selectedText}" 的意思是：这是申请表上的关键字段。需要提供与政府颁发的官方文件完全一致的准确信息。提供不正确的信息可能导致延误或拒绝。`,
-      },
-      fill: {
-        en: `To fill "${selectedText}" correctly:\n\n1. GATHER DOCUMENTS: Collect your passport, birth certificate, and any relevant official records\n\n2. VERIFY INFORMATION: Check that names, dates, and numbers match exactly across all documents\n\n3. FORMAT CORRECTLY: Pay attention to date formats (MM/DD/YYYY vs DD/MM/YYYY), name order (First, Middle, Last), and capitalization\n\n4. DOUBLE-CHECK: Review your entry at least twice before moving to the next field\n\n5. COMMON MISTAKES TO AVOID:\n   • Spelling variations in names\n   • Wrong date formats\n   • Missing middle names\n   • Transposed numbers\n\n6. IF UNSURE: Contact the issuing authority or refer to your most recent official document`,
-        es: `Para completar "${selectedText}" correctamente:\n\n1. REÚNA DOCUMENTOS: Pasaporte, acta de nacimiento y registros oficiales\n2. VERIFIQUE INFORMACIÓN: Los nombres, fechas y números deben coincidir exactamente\n3. FORMATO CORRECTO: Atención a formatos de fecha, orden de nombres y mayúsculas\n4. VERIFIQUE DOS VECES: Revise su entrada antes de continuar\n5. ERRORES COMUNES: Variaciones de ortografía, formatos de fecha incorrectos, nombres intermedios faltantes`,
-        fr: `Pour remplir "${selectedText}" correctement:\n\n1. RASSEMBLEZ LES DOCUMENTS: Passeport, acte de naissance et dossiers officiels\n2. VÉRIFIEZ LES INFORMATIONS: Les noms, dates et numéros doivent correspondre exactement\n3. FORMAT CORRECT: Attention aux formats de date, ordre des noms et majuscules\n4. DOUBLE VÉRIFICATION: Examinez votre saisie avant de continuer`,
-        de: `Um "${selectedText}" korrekt auszufüllen:\n\n1. DOKUMENTE SAMMELN: Pass, Geburtsurkunde und offizielle Unterlagen\n2. INFORMATIONEN ÜBERPRÜFEN: Namen, Daten und Nummern müssen genau übereinstimmen\n3. KORREKTES FORMAT: Achten Sie auf Datumsformate, Namensreihenfolge und Großschreibung\n4. DOPPELTE ÜBERPRÜFUNG: Überprüfen Sie Ihre Eingabe zweimal`,
-        zh: `正确填写"${selectedText}"：\n\n1. 收集文件：护照、出生证明和相关官方记录\n2. 验证信息：确保姓名、日期和号码在所有文件中完全匹配\n3. 正确格式：注意日期格式、姓名顺序和大小写\n4. 仔细检查：在继续下一个字段之前至少检查两次\n5. 常见错误：姓名拼写变化、日期格式错误、缺少中间名、数字颠倒`,
-      },
-      help: {
-        en: `I can help you with "${selectedText}"! Here's what I can do:\n\n• "Explain this" - Get a comprehensive explanation of what this field means and why it's important\n\n• "How do I fill this" - Receive detailed step-by-step instructions with examples\n\n• "What documents do I need" - Learn which official documents to reference\n\n• "Common mistakes" - Understand typical errors people make with this field\n\n• "Examples" - See sample entries to guide your input\n\nJust ask your question in plain language, and I'll provide clear, actionable guidance!`,
-        es: `¡Puedo ayudarte con "${selectedText}"! Esto es lo que puedo hacer:\n\n• "Explica esto" - Obtener una explicación completa\n• "Cómo lleno esto" - Recibir instrucciones detalladas paso a paso\n• "Qué documentos necesito" - Aprender qué documentos oficiales consultar\n• "Errores comunes" - Entender errores típicos\n• "Ejemplos" - Ver entradas de muestra`,
-        fr: `Je peux vous aider avec "${selectedText}" ! Vous pouvez me demander :\n• "Expliquer ceci" - Obtenir une explication détaillée\n• "Comment remplir ceci" - Obtenir des instructions étape par étape\n• Ou poser toute question spécifique sur ce champ`,
-        de: `Ich kann Ihnen mit "${selectedText}" helfen! Sie können mich bitten:\n• "Erkläre dies" - Erhalten Sie eine detaillierte Erklärung\n• "Wie fülle ich dies aus" - Erhalten Sie Schritt-für-Schritt-Anweisungen\n• Oder stellen Sie eine spezifische Frage zu diesem Feld`,
-        zh: `我可以帮助您处理"${selectedText}"！您可以要求我：\n• "解释这个" - 获得详细解释\n• "如何填写这个" - 获得分步说明\n• 或询问有关此字段的任何具体问题`,
-      },
+    if (lowerQuery.includes("based on your form") || lowerQuery.includes("name:")) {
+      const responses: Record<string, string> = {
+        en: "I've reviewed your form! Would you like me to translate this summary to another language? Everything looks good so far. If anything seems incorrect, let me know and I can guide you to update it.",
+        es: "¡He revisado tu formulario! ¿Te gustaría que traduzca este resumen a otro idioma? Todo se ve bien hasta ahora. Si algo parece incorrecto, avísame y puedo guiarte para actualizarlo.",
+        zh: "我已审查了您的表格！您想让我将此摘要翻译成另一种语言吗？到目前为止一切看起来都很好。如果有任何不正确的地方，请告诉我，我可以指导您更新。",
+        pt: "Revisei seu formulário! Gostaria que eu traduzisse este resumo para outro idioma? Tudo parece bom até agora. Se algo parecer incorreto, me avise e posso orientá-lo a atualizar.",
+        fr: "J'ai examiné votre formulaire! Voulez-vous que je traduise ce résumé dans une autre langue? Tout semble bon pour l'instant. Si quelque chose semble incorrect, faites-le-moi savoir et je peux vous guider pour le mettre à jour.",
+        de: "Ich habe Ihr Formular überprüft! Möchten Sie, dass ich diese Zusammenfassung in eine andere Sprache übersetze? Bisher sieht alles gut aus. Wenn etwas falsch erscheint, lassen Sie es mich wissen und ich kann Sie beim Aktualisieren anleiten.",
+      };
+      return responses[lang] || responses.en;
+    }
+
+    if (lowerQuery.includes("age") || lowerQuery.includes("date of birth") || lowerQuery.includes("wrong")) {
+      if (onHighlightField) {
+        onHighlightField("dateOfBirth");
+      }
+      return "I've highlighted the Date of Birth field for you. Please update it with the correct information.";
+    }
+
+    if (lowerQuery.includes("name") && lowerQuery.includes("wrong")) {
+      if (onHighlightField) {
+        onHighlightField("fullName");
+      }
+      return "I've highlighted the Full Name field for you. Please update it with the correct information.";
+    }
+
+    const responses: Record<string, string> = {
+      en: "I'm here to help! Select any text in the form to get explanations, or use 'Check My Form' to review what you've filled in.",
+      es: "¡Estoy aquí para ayudar! Selecciona cualquier texto en el formulario para obtener explicaciones, o usa 'Verificar Mi Formulario' para revisar lo que has completado.",
+      zh: "我在这里帮助您！选择表单中的任何文本以获取解释",
+      pt: "Estou aqui para ajudar! Selecione qualquer texto no formulário para obter explicações, ou use 'Verificar Meu Formulário' para revisar o que você preencheu.",
+      fr: "Je suis là pour vous aider! Sélectionnez n'importe quel texte dans le formulaire pour obtenir des explications, ou utilisez 'Vérifier Mon Formulaire' pour examiner ce que vous avez rempli.",
+      de: "Ich bin hier, um zu helfen! Wählen Sie einen beliebigen Text im Formular aus, um Erklärungen zu erhalten, oder verwenden Sie 'Mein Formular prüfen', um zu überprüfen, was Sie ausgefüllt haben.",
     };
 
-    if (lowerQuery.includes("explain")) {
-      return responses.explain[lang] || responses.explain.en;
-    } else if (lowerQuery.includes("fill") || lowerQuery.includes("complete")) {
-      return responses.fill[lang] || responses.fill.en;
-    } else if (lowerQuery.includes("help") || lowerQuery === "") {
-      return responses.help[lang] || responses.help.en;
-    } else {
-      return responses.explain[lang] || responses.explain.en;
-    }
+    return responses[lang] || responses.en;
   };
 
   useEffect(() => {
-    if (selectedText) {
-      const initialMessage: Message = {
-        role: "assistant",
-        content: getMockResponse("help", language),
-      };
-      setMessages([initialMessage]);
+    if (selectedText && selectedText.trim()) {
+      const userMessage: Message = { role: "user", content: selectedText };
+      setMessages([userMessage]);
+      
+      setIsTyping(true);
+      setTimeout(() => {
+        const response = getMockResponse(selectedText, language);
+        const assistantMessage: Message = { role: "assistant", content: response };
+        setMessages([userMessage, assistantMessage]);
+        setIsTyping(false);
+      }, 1000);
     }
   }, [selectedText, language]);
 
@@ -90,37 +97,48 @@ const ChatBot = ({ selectedText = "", onClose, position }: ChatBotProps) => {
     }
   }, [messages]);
 
-  const handleSend = async () => {
+  const handleSend = () => {
     if (!input.trim()) return;
 
     const userMessage: Message = { role: "user", content: input };
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages(prev => [...prev, userMessage]);
     setInput("");
-    setIsTyping(true);
 
-    // Simulate typing delay
+    setIsTyping(true);
     setTimeout(() => {
       const response = getMockResponse(input, language);
       const assistantMessage: Message = { role: "assistant", content: response };
-      setMessages((prev) => [...prev, assistantMessage]);
+      setMessages(prev => [...prev, assistantMessage]);
       setIsTyping(false);
     }, 1000);
   };
 
-  const handleQuickCommand = (command: string) => {
-    setInput(command);
-    setTimeout(() => handleSend(), 100);
+  const handleQuickTranslate = () => {
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage && lastMessage.role === "assistant") {
+      setInput("Translate to " + languages.find(l => l.code === language)?.name);
+      handleSend();
+    }
   };
 
   return (
-    <Card className="w-96 h-[calc(100vh-120px)] shadow-elegant border-border flex flex-col sticky top-20">
-      <div className="p-4 border-b border-border bg-gradient-card flex-shrink-0">
-        <div className="flex items-center gap-2 mb-3">
-          <MessageSquare className="w-5 h-5 text-primary" />
-          <h3 className="font-semibold text-foreground">Form Assistant</h3>
+    <Card className="fixed bottom-6 right-6 w-96 max-h-[500px] shadow-2xl border-2 border-primary/20 flex flex-col z-50 animate-in slide-in-from-bottom-5 duration-300">
+      <div className="p-4 border-b border-border bg-gradient-to-r from-primary/10 to-accent/10 flex-shrink-0 rounded-t-lg">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <div className="p-2 bg-primary/20 rounded-full">
+              <Sparkles className="w-4 h-4 text-primary animate-pulse" />
+            </div>
+            <h3 className="font-semibold text-foreground">AI Form Assistant</h3>
+          </div>
+          {onClose && (
+            <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8">
+              <X className="w-4 h-4" />
+            </Button>
+          )}
         </div>
         <Select value={language} onValueChange={setLanguage}>
-          <SelectTrigger className="w-full bg-background border-border">
+          <SelectTrigger className="w-full bg-background border-border h-9">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -134,18 +152,21 @@ const ChatBot = ({ selectedText = "", onClose, position }: ChatBotProps) => {
       </div>
 
       {selectedText && (
-        <div className="px-4 py-3 bg-primary/10 border-b border-border flex-shrink-0">
-          <p className="text-sm text-muted-foreground mb-1">Selected text:</p>
-          <p className="text-sm font-medium text-foreground">{selectedText}</p>
+        <div className="px-4 py-2 bg-accent/20 border-b border-border flex-shrink-0">
+          <p className="text-xs text-muted-foreground mb-1">Context:</p>
+          <p className="text-sm font-medium text-foreground line-clamp-2">{selectedText}</p>
         </div>
       )}
 
       <ScrollArea className="flex-1 p-4" ref={scrollRef}>
-        <div className="space-y-4">
+        <div className="space-y-3">
           {messages.length === 0 && (
             <div className="text-center text-muted-foreground text-sm py-8">
-              <MessageSquare className="w-12 h-12 mx-auto mb-3 opacity-50" />
-              <p>Highlight any text in the form to get help</p>
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                <MessageSquare className="w-8 h-8 text-primary" />
+              </div>
+              <p className="font-medium mb-1">👋 Hi! I'm your AI assistant</p>
+              <p className="text-xs">Highlight text or use "Check My Form"</p>
             </div>
           )}
           
@@ -155,10 +176,10 @@ const ChatBot = ({ selectedText = "", onClose, position }: ChatBotProps) => {
               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`max-w-[85%] rounded-lg px-4 py-2 ${
+                className={`max-w-[85%] rounded-2xl px-4 py-2 ${
                   msg.role === "user"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-foreground"
+                    ? "bg-primary text-primary-foreground rounded-br-sm"
+                    : "bg-muted text-foreground rounded-bl-sm"
                 }`}
               >
                 <p className="text-sm whitespace-pre-line">{msg.content}</p>
@@ -167,7 +188,7 @@ const ChatBot = ({ selectedText = "", onClose, position }: ChatBotProps) => {
           ))}
           {isTyping && (
             <div className="flex justify-start">
-              <div className="bg-muted rounded-lg px-4 py-2">
+              <div className="bg-muted rounded-2xl rounded-bl-sm px-4 py-3">
                 <div className="flex gap-1">
                   <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
                   <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
@@ -179,36 +200,28 @@ const ChatBot = ({ selectedText = "", onClose, position }: ChatBotProps) => {
         </div>
       </ScrollArea>
 
-      <div className="p-4 border-t border-border space-y-2 flex-shrink-0">
+      <div className="p-3 border-t border-border space-y-2 flex-shrink-0 bg-background/50">
+        {messages.length > 0 && messages[messages.length - 1]?.role === "assistant" && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleQuickTranslate}
+            className="w-full text-xs h-8"
+          >
+            🌍 Translate this to {languages.find(l => l.code === language)?.name}
+          </Button>
+        )}
+        
         <div className="flex gap-2">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            placeholder="Ask a question..."
-            className="flex-1"
+            placeholder="Ask me anything..."
+            className="flex-1 h-9 text-sm"
           />
-          <Button onClick={handleSend} size="icon">
+          <Button onClick={handleSend} size="icon" className="h-9 w-9 flex-shrink-0">
             <Send className="w-4 h-4" />
-          </Button>
-        </div>
-        
-        <div className="flex gap-2 flex-wrap">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleQuickCommand("Explain this section")}
-            className="text-xs"
-          >
-            Explain this
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleQuickCommand("What documents do I need?")}
-            className="text-xs"
-          >
-            Documents needed
           </Button>
         </div>
       </div>

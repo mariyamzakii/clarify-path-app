@@ -12,12 +12,12 @@ interface Message {
 }
 
 interface ChatBotProps {
-  selectedText: string;
-  onClose: () => void;
-  position: { x: number; y: number };
+  selectedText?: string;
+  onClose?: () => void;
+  position?: { x: number; y: number };
 }
 
-const ChatBot = ({ selectedText, onClose, position }: ChatBotProps) => {
+const ChatBot = ({ selectedText = "", onClose, position }: ChatBotProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [language, setLanguage] = useState("en");

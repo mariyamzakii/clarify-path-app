@@ -33,7 +33,7 @@ const Hero = ({ onLoginClick }: HeroProps) => {
             <Button 
               size="lg"
               onClick={onLoginClick}
-              className="bg-accent hover:bg-accent/90 text-accent-foreground shadow-medium min-w-[250px] h-16 text-xl font-bold transition-all hover:scale-105"
+              className="bg-white text-primary hover:bg-white/90 shadow-medium min-w-[250px] h-16 text-xl font-bold transition-all hover:scale-105"
             >
               Log In
             </Button>

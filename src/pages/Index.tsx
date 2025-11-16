@@ -14,7 +14,7 @@ import ChatBot from "@/components/ChatBot";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
-type View = "home" | "login" | "main-menu" | "browse-forms" | "upload" | "camera" | "progress" | "visa-form" | "bundle" | "ai-chat";
+type View = "home" | "login" | "main-menu" | "browse-forms" | "upload" | "camera" | "progress" | "visa-form" | "bundle";
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<View>("home");
@@ -119,7 +119,7 @@ const Index = () => {
               <MainMenu
                 onUploadClick={() => setCurrentView("upload")}
                 onBrowseClick={() => setCurrentView("browse-forms")}
-                onAIClick={() => setCurrentView("ai-chat")}
+                onCameraClick={() => setCurrentView("camera")}
               />
             )}
 
@@ -131,12 +131,6 @@ const Index = () => {
                 onBundleSelect={handleBundleSelect}
                 inProgressDocs={inProgressDocs}
               />
-            )}
-
-            {currentView === "ai-chat" && (
-              <div className="max-w-4xl mx-auto">
-                <ChatBot />
-              </div>
             )}
 
             {currentView === "upload" && (

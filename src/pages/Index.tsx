@@ -16,7 +16,7 @@ import I20Form from "@/components/I20Form";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
-type View = "home" | "login" | "main-menu" | "browse-forms" | "upload" | "camera" | "progress" | "visa-form" | "bundle" | "fafsa-form" | "student-visa-form" | "i20-form";
+type View = "home" | "login" | "main-menu" | "browse-forms" | "upload" | "camera" | "progress" | "visa-form" | "bundle" | "fafsa-form" | "student-visa-form" | "i20-form" | "generic-form";
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<View>("home");
@@ -26,6 +26,7 @@ const Index = () => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [visaCompleted, setVisaCompleted] = useState(false);
   const [selectedBundle, setSelectedBundle] = useState<string>("");
+  const [currentFormType, setCurrentFormType] = useState<string>("");
   const [inProgressDocs, setInProgressDocs] = useState<Array<{ id: string; name: string; status: string }>>([
     { id: "visa", name: "Visa Application", status: "In Progress" }
   ]);
@@ -68,10 +69,10 @@ const Index = () => {
       "fafsa": "FAFSA Form",
       "student-visa": "F-1 Student Visa",
       "i-20": "I-20 Form",
-      "passport": "Passport Renewal",
-      "tax": "Tax Forms",
-      "immigration": "Immigration Forms",
-      "work-permit": "Work Permit"
+      "passport": "Passport Application",
+      "birth-certificate": "Birth Certificate Request",
+      "marriage-certificate": "Marriage Certificate",
+      "background-check": "Background Check Form",
     };
     
     if (!inProgressDocs.find(doc => doc.id === docType)) {
@@ -96,8 +97,14 @@ const Index = () => {
         setCurrentView("i20-form");
         break;
       default:
-        setCurrentView("browse-forms");
+        // For all other forms, use the generic form
+        setCurrentFormType(docType);
+        setCurrentView("generic-form");
     }
+  };
+
+  const handleDeleteDoc = (docId: string) => {
+    setInProgressDocs(prev => prev.filter(doc => doc.id !== docId));
   };
 
   const handleBundleSelect = (bundleType: string) => {
@@ -156,15 +163,16 @@ const Index = () => {
               />
             )}
 
-            {currentView === "browse-forms" && (
-              <DocumentSelector
-                onUploadClick={() => setCurrentView("upload")}
-                onCameraClick={() => setCurrentView("camera")}
-                onDocumentSelect={handleDocumentSelect}
-                onBundleSelect={handleBundleSelect}
-                inProgressDocs={inProgressDocs}
-              />
-            )}
+      {currentView === "browse-forms" && (
+        <DocumentSelector
+          onUploadClick={() => setCurrentView("upload")}
+          onCameraClick={() => setCurrentView("camera")}
+          onDocumentSelect={handleDocumentSelect}
+          onBundleSelect={handleBundleSelect}
+          inProgressDocs={inProgressDocs}
+          onDeleteDoc={handleDeleteDoc}
+        />
+      )}
 
             {currentView === "upload" && (
             <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
@@ -249,6 +257,16 @@ const Index = () => {
             {currentView === "i20-form" && (
               <div className="animate-fade-in">
                 <I20Form 
+                  onSubmit={() => setCurrentView("browse-forms")}
+                />
+              </div>
+            )}
+
+            {currentView === "generic-form" && (
+              <div className="animate-fade-in">
+                <GenericForm 
+                  formName={currentFormType.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
+                  formType={currentFormType}
                   onSubmit={() => setCurrentView("browse-forms")}
                 />
               </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FolderOpen, CheckCircle2, Circle, ChevronDown, ChevronRight } from "lucide-react";
+import { FolderOpen, CheckCircle2, Circle, ChevronDown, ChevronRight, Trash2, FileText } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface DocumentSelectorProps {
@@ -10,6 +10,7 @@ interface DocumentSelectorProps {
   onDocumentSelect: (docType: string) => void;
   onBundleSelect: (bundleType: string) => void;
   inProgressDocs: Array<{ id: string; name: string; status: string }>;
+  onDeleteDoc: (docId: string) => void;
 }
 
 const DocumentSelector = ({
@@ -18,8 +19,10 @@ const DocumentSelector = ({
   onDocumentSelect,
   onBundleSelect,
   inProgressDocs,
+  onDeleteDoc,
 }: DocumentSelectorProps) => {
   const [openBundles, setOpenBundles] = useState<Record<string, boolean>>({});
+  const [hoveredDoc, setHoveredDoc] = useState<string | null>(null);
 
   const bundles = [
     { id: "citizenship", name: "Citizenship Forms Bundle", count: 5 },
@@ -68,6 +71,13 @@ const DocumentSelector = ({
     setOpenBundles(prev => ({ ...prev, [bundleId]: !prev[bundleId] }));
   };
 
+  const individualForms = [
+    { id: "passport", name: "Passport Application" },
+    { id: "birth-certificate", name: "Birth Certificate Request" },
+    { id: "marriage-certificate", name: "Marriage Certificate" },
+    { id: "background-check", name: "Background Check Form" },
+  ];
+
   return (
     <div className="space-y-8">
       <Card className="p-6 shadow-soft bg-gradient-card border-border">
@@ -75,23 +85,42 @@ const DocumentSelector = ({
           Browse Forms
         </h2>
 
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Form Bundles</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {bundles.map((bundle) => (
-              <Button
-                key={bundle.id}
-                onClick={() => onBundleSelect(bundle.id)}
-                variant="outline"
-                className="h-24 flex flex-col gap-2 justify-center"
-              >
-                <FolderOpen className="w-6 h-6" />
-                <span className="font-semibold">{bundle.name}</span>
-                <span className="text-xs text-muted-foreground">
-                  {bundle.count} forms
-                </span>
-              </Button>
-            ))}
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Form Bundles</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {bundles.map((bundle) => (
+                <Button
+                  key={bundle.id}
+                  onClick={() => onBundleSelect(bundle.id)}
+                  variant="outline"
+                  className="h-24 flex flex-col gap-2 justify-center"
+                >
+                  <FolderOpen className="w-6 h-6" />
+                  <span className="font-semibold">{bundle.name}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {bundle.count} forms
+                  </span>
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Individual Forms</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {individualForms.map((form) => (
+                <Button
+                  key={form.id}
+                  onClick={() => onDocumentSelect(form.id)}
+                  variant="outline"
+                  className="h-24 flex flex-col gap-2 justify-center"
+                >
+                  <FileText className="w-6 h-6" />
+                  <span className="font-semibold">{form.name}</span>
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
       </Card>
@@ -178,14 +207,31 @@ const DocumentSelector = ({
                 return (
                   <Card
                     key={doc.id}
-                    className="p-5 hover:shadow-medium transition-all cursor-pointer border-border"
+                    className="p-5 hover:shadow-medium transition-all cursor-pointer border-border relative group"
                     onClick={() => onDocumentSelect(doc.id)}
+                    onMouseEnter={() => setHoveredDoc(doc.id)}
+                    onMouseLeave={() => setHoveredDoc(null)}
                   >
                     <div className="flex items-center justify-between mb-3">
                       <h4 className="font-semibold text-lg">{doc.name}</h4>
-                      <span className={`text-xs px-3 py-1 rounded-full font-medium ${status.color}`}>
-                        {status.text}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className={`text-xs px-3 py-1 rounded-full font-medium ${status.color}`}>
+                          {status.text}
+                        </span>
+                        {hoveredDoc === doc.id && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-destructive hover:bg-destructive/10"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onDeleteDoc(doc.id);
+                            }}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        )}
+                      </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="flex-1">

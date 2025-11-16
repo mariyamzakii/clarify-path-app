@@ -158,7 +158,7 @@ const ChatBot = ({ selectedText = "", onClose, onHighlightField }: ChatBotProps)
         </div>
       )}
 
-      <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+      <ScrollArea className="flex-1 p-4 h-[400px]">
         <div className="space-y-3">
           {messages.length === 0 && (
             <div className="text-center text-muted-foreground text-sm py-8">

@@ -11,10 +11,13 @@ import ProgressTracker from "@/components/ProgressTracker";
 import VisaApplicationForm from "@/components/VisaApplicationForm";
 import BundleChecklist from "@/components/BundleChecklist";
 import ChatBot from "@/components/ChatBot";
+import FAFSAForm from "@/components/FAFSAForm";
+import StudentVisaForm from "@/components/StudentVisaForm";
+import I20Form from "@/components/I20Form";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
-type View = "home" | "login" | "main-menu" | "browse-forms" | "upload" | "camera" | "progress" | "visa-form" | "bundle";
+type View = "home" | "login" | "main-menu" | "browse-forms" | "upload" | "camera" | "progress" | "visa-form" | "bundle" | "fafsa-form" | "student-visa-form" | "i20-form";
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<View>("home");
@@ -60,10 +63,21 @@ const Index = () => {
   };
 
   const handleDocumentSelect = (docType: string) => {
-    if (docType === "visa") {
-      setCurrentView("visa-form");
-    } else {
-      setCurrentView("progress");
+    switch (docType) {
+      case "visa":
+        setCurrentView("visa-form");
+        break;
+      case "fafsa":
+        setCurrentView("fafsa-form");
+        break;
+      case "student-visa":
+        setCurrentView("student-visa-form");
+        break;
+      case "i-20":
+        setCurrentView("i20-form");
+        break;
+      default:
+        setCurrentView("progress");
     }
   };
 
@@ -186,10 +200,33 @@ const Index = () => {
                 <BundleChecklist
                   bundleName={selectedBundle}
                   onFormClick={(formId) => {
-                    console.log("Opening form:", formId);
-                    setCurrentView("visa-form");
+                    handleDocumentSelect(formId);
                   }}
                   onBack={() => setCurrentView("browse-forms")}
+                />
+              </div>
+            )}
+
+            {currentView === "fafsa-form" && (
+              <div className="animate-fade-in">
+                <FAFSAForm 
+                  onSubmit={() => setCurrentView("browse-forms")}
+                />
+              </div>
+            )}
+
+            {currentView === "student-visa-form" && (
+              <div className="animate-fade-in">
+                <StudentVisaForm 
+                  onSubmit={() => setCurrentView("browse-forms")}
+                />
+              </div>
+            )}
+
+            {currentView === "i20-form" && (
+              <div className="animate-fade-in">
+                <I20Form 
+                  onSubmit={() => setCurrentView("browse-forms")}
                 />
               </div>
             )}

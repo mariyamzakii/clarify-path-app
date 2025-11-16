@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ChatBot from "./ChatBot";
 import FormHelper from "./FormHelper";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, MessageCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface I20FormProps {
@@ -224,6 +224,21 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
           onHighlightField={(field) => setHighlightedField(field)}
         />
       )}
+
+      {/* Floating Help Button */}
+      <button
+        onClick={() => setShowChat(!showChat)}
+        className="fixed bottom-6 right-6 z-40 group"
+      >
+        <div className="relative">
+          <div className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
+            Need help?
+          </div>
+          <div className="bg-primary hover:bg-primary/90 text-primary-foreground p-4 rounded-full shadow-elegant hover:shadow-glow transition-all">
+            <MessageCircle className="w-6 h-6" />
+          </div>
+        </div>
+      </button>
     </div>
   );
 };

@@ -108,7 +108,7 @@ const ChatBot = ({ selectedText = "", onClose, onHighlightField }: ChatBotProps)
           "Content-Type": "application/json",
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({ messages: msgs }),
+        body: JSON.stringify({ messages: msgs, language }),
       });
       if (!resp.ok) {
         const err = await resp.json().catch(() => ({} as any));

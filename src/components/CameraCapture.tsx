@@ -19,13 +19,19 @@ const CameraCapture = ({ onCapture, onClose }: CameraCaptureProps) => {
   const startCamera = async () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" }
+        video: { 
+          facingMode: "environment",
+          width: { ideal: 1920 },
+          height: { ideal: 1080 }
+        }
       });
       setStream(mediaStream);
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream;
+        videoRef.current.play();
       }
     } catch (error) {
+      console.error("Camera error:", error);
       toast({
         title: "Camera access denied",
         description: "Please allow camera access to capture documents",

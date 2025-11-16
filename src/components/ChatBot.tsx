@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { X, Send, Loader2 } from "lucide-react";
+import { X, Send, Loader2, MessageSquare } from "lucide-react";
 
 interface Message {
   role: "user" | "assistant";
@@ -113,48 +113,52 @@ const ChatBot = ({ selectedText = "", onClose, position }: ChatBotProps) => {
   };
 
   return (
-    <Card className="fixed z-50 w-96 shadow-lg animate-fade-in" 
-          style={{ 
-            left: Math.min(position.x, window.innerWidth - 400),
-            top: Math.min(position.y, window.innerHeight - 500),
-          }}>
-      <div className="flex items-center justify-between p-4 border-b">
-        <div className="flex items-center gap-2">
-          <h3 className="font-semibold">AI Assistant</h3>
-          <Select value={language} onValueChange={setLanguage}>
-            <SelectTrigger className="w-32 h-8">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {languages.map((lang) => (
-                <SelectItem key={lang.code} value={lang.code}>
-                  {lang.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+    <Card className="w-96 h-[calc(100vh-120px)] shadow-elegant border-border flex flex-col sticky top-20">
+      <div className="p-4 border-b border-border bg-gradient-card flex-shrink-0">
+        <div className="flex items-center gap-2 mb-3">
+          <MessageSquare className="w-5 h-5 text-primary" />
+          <h3 className="font-semibold text-foreground">Form Assistant</h3>
         </div>
-        <Button variant="ghost" size="icon" onClick={onClose}>
-          <X className="w-4 h-4" />
-        </Button>
+        <Select value={language} onValueChange={setLanguage}>
+          <SelectTrigger className="w-full bg-background border-border">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {languages.map((lang) => (
+              <SelectItem key={lang.code} value={lang.code}>
+                {lang.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
-      <div className="p-4 bg-accent/30 border-b">
-        <p className="text-sm font-medium">Selected: "{selectedText}"</p>
-      </div>
+      {selectedText && (
+        <div className="px-4 py-3 bg-primary/10 border-b border-border flex-shrink-0">
+          <p className="text-sm text-muted-foreground mb-1">Selected text:</p>
+          <p className="text-sm font-medium text-foreground">{selectedText}</p>
+        </div>
+      )}
 
-      <ScrollArea className="h-64 p-4" ref={scrollRef}>
+      <ScrollArea className="flex-1 p-4" ref={scrollRef}>
         <div className="space-y-4">
+          {messages.length === 0 && (
+            <div className="text-center text-muted-foreground text-sm py-8">
+              <MessageSquare className="w-12 h-12 mx-auto mb-3 opacity-50" />
+              <p>Highlight any text in the form to get help</p>
+            </div>
+          )}
+          
           {messages.map((msg, idx) => (
             <div
               key={idx}
               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`rounded-lg px-4 py-2 max-w-[80%] ${
+                className={`max-w-[85%] rounded-lg px-4 py-2 ${
                   msg.role === "user"
                     ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-secondary-foreground"
+                    : "bg-muted text-foreground"
                 }`}
               >
                 <p className="text-sm whitespace-pre-line">{msg.content}</p>
@@ -163,41 +167,48 @@ const ChatBot = ({ selectedText = "", onClose, position }: ChatBotProps) => {
           ))}
           {isTyping && (
             <div className="flex justify-start">
-              <div className="bg-secondary text-secondary-foreground rounded-lg px-4 py-2">
-                <Loader2 className="w-4 h-4 animate-spin" />
+              <div className="bg-muted rounded-lg px-4 py-2">
+                <div className="flex gap-1">
+                  <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                  <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                  <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                </div>
               </div>
             </div>
           )}
         </div>
       </ScrollArea>
 
-      <div className="p-4 border-t space-y-2">
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleQuickCommand("Explain this")}
-          >
-            Explain
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleQuickCommand("How do I fill this")}
-          >
-            How to Fill
-          </Button>
-        </div>
+      <div className="p-4 border-t border-border space-y-2 flex-shrink-0">
         <div className="flex gap-2">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleSend()}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
             placeholder="Ask a question..."
             className="flex-1"
           />
           <Button onClick={handleSend} size="icon">
             <Send className="w-4 h-4" />
+          </Button>
+        </div>
+        
+        <div className="flex gap-2 flex-wrap">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleQuickCommand("Explain this section")}
+            className="text-xs"
+          >
+            Explain this
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleQuickCommand("What documents do I need?")}
+            className="text-xs"
+          >
+            Documents needed
           </Button>
         </div>
       </div>

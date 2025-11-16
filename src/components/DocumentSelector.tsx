@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Upload, Camera, FileText, FolderOpen, CheckCircle2, Circle, ChevronDown, ChevronRight } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FolderOpen, CheckCircle2, Circle, ChevronDown, ChevronRight } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface DocumentSelectorProps {
@@ -20,16 +19,7 @@ const DocumentSelector = ({
   onBundleSelect,
   inProgressDocs,
 }: DocumentSelectorProps) => {
-  const [activeTab, setActiveTab] = useState("individual");
   const [openBundles, setOpenBundles] = useState<Record<string, boolean>>({});
-  const individualDocuments = [
-    { id: "visa", name: "Visa Application", icon: FileText },
-    { id: "passport", name: "Passport Renewal", icon: FileText },
-    { id: "fafsa", name: "FAFSA Form", icon: FileText },
-    { id: "tax", name: "Tax Forms", icon: FileText },
-    { id: "immigration", name: "Immigration Forms", icon: FileText },
-    { id: "work-permit", name: "Work Permit", icon: FileText },
-  ];
 
   const bundles = [
     { id: "citizenship", name: "Citizenship Forms Bundle", count: 5 },
@@ -68,6 +58,12 @@ const DocumentSelector = ({
     return Math.round((completed / forms.length) * 100);
   };
 
+  const getStatusBadge = (progress: number) => {
+    if (progress === 0) return { text: "Not Started", color: "bg-muted text-muted-foreground" };
+    if (progress < 100) return { text: "In Progress", color: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400" };
+    return { text: "Completed", color: "bg-green-500/10 text-green-600 dark:text-green-400" };
+  };
+
   const toggleBundle = (bundleId: string) => {
     setOpenBundles(prev => ({ ...prev, [bundleId]: !prev[bundleId] }));
   };
@@ -79,52 +75,34 @@ const DocumentSelector = ({
           Browse Forms
         </h2>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="individual">Select Individual</TabsTrigger>
-            <TabsTrigger value="bundle">Bundle</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="individual" className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {individualDocuments.map((doc) => (
-                <Button
-                  key={doc.id}
-                  onClick={() => onDocumentSelect(doc.id)}
-                  variant="outline"
-                  className="h-20 justify-start gap-3 text-left"
-                >
-                  <doc.icon className="w-5 h-5 flex-shrink-0" />
-                  <span className="font-medium">{doc.name}</span>
-                </Button>
-              ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="bundle" className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {bundles.map((bundle) => (
-                <Button
-                  key={bundle.id}
-                  onClick={() => onBundleSelect(bundle.id)}
-                  variant="outline"
-                  className="h-24 flex flex-col gap-2 justify-center"
-                >
-                  <FolderOpen className="w-6 h-6" />
-                  <span className="font-semibold">{bundle.name}</span>
-                  <span className="text-xs text-muted-foreground">
-                    {bundle.count} forms
-                  </span>
-                </Button>
-              ))}
-            </div>
-          </TabsContent>
-        </Tabs>
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Form Bundles</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {bundles.map((bundle) => (
+              <Button
+                key={bundle.id}
+                onClick={() => onBundleSelect(bundle.id)}
+                variant="outline"
+                className="h-24 flex flex-col gap-2 justify-center"
+              >
+                <FolderOpen className="w-6 h-6" />
+                <span className="font-semibold">{bundle.name}</span>
+                <span className="text-xs text-muted-foreground">
+                  {bundle.count} forms
+                </span>
+              </Button>
+            ))}
+          </div>
+        </div>
       </Card>
 
-      {inProgressDocs.length > 0 && (
-        <Card className="p-6 shadow-soft bg-gradient-card border-border">
-          <h3 className="text-xl font-semibold mb-4">My Forms</h3>
+      <Card className="p-6 shadow-soft bg-gradient-card border-border">
+        <h3 className="text-xl font-semibold mb-4">My Forms</h3>
+        {inProgressDocs.length === 0 ? (
+          <p className="text-muted-foreground text-center py-8">
+            No forms started yet. Select a form bundle above or start filling out individual forms.
+          </p>
+        ) : (
           <div className="space-y-3">
             {inProgressDocs.map((doc) => {
               const isBundle = doc.id.includes("-bundle");
@@ -196,51 +174,37 @@ const DocumentSelector = ({
                   </Collapsible>
                 );
               } else {
+                const status = getStatusBadge(progress);
                 return (
                   <Card
                     key={doc.id}
-                    className="p-4 hover:shadow-medium transition-all cursor-pointer"
+                    className="p-5 hover:shadow-medium transition-all cursor-pointer border-border"
                     onClick={() => onDocumentSelect(doc.id)}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="font-medium">{doc.name}</span>
-                      <div className="flex items-center gap-2">
-                        <div className="relative w-10 h-10">
-                          <svg className="w-10 h-10 transform -rotate-90">
-                            <circle
-                              cx="20"
-                              cy="20"
-                              r="16"
-                              stroke="currentColor"
-                              strokeWidth="3"
-                              fill="none"
-                              className="text-muted"
-                            />
-                            <circle
-                              cx="20"
-                              cy="20"
-                              r="16"
-                              stroke="currentColor"
-                              strokeWidth="3"
-                              fill="none"
-                              strokeDasharray={`${2 * Math.PI * 16}`}
-                              strokeDashoffset={`${2 * Math.PI * 16 * (1 - progress / 100)}`}
-                              className="text-primary transition-all"
-                            />
-                          </svg>
-                          <span className="absolute inset-0 flex items-center justify-center text-xs font-semibold">
-                            {progress}%
-                          </span>
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="font-semibold text-lg">{doc.name}</h4>
+                      <span className={`text-xs px-3 py-1 rounded-full font-medium ${status.color}`}>
+                        {status.text}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="flex-1">
+                        <div className="w-full bg-muted rounded-full h-2">
+                          <div 
+                            className="bg-primary h-2 rounded-full transition-all"
+                            style={{ width: `${progress}%` }}
+                          />
                         </div>
                       </div>
+                      <span className="text-sm font-semibold text-muted-foreground">{progress}%</span>
                     </div>
                   </Card>
                 );
               }
             })}
           </div>
-        </Card>
-      )}
+        )}
+      </Card>
     </div>
   );
 };

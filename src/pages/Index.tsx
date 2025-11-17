@@ -144,10 +144,16 @@ const Index = () => {
         <>
           <Header userName={userName} onTitleDoubleClick={handleTitleDoubleClick} />
           <div className="container mx-auto px-4 py-8">
-            {currentView !== "main-menu" && currentView !== "browse-forms" && (
+            {currentView !== "main-menu" && (
               <Button
                 variant="ghost"
-                onClick={() => setCurrentView("browse-forms")}
+                onClick={() => {
+                  if (currentView === "upload" || currentView === "camera" || currentView === "browse-forms") {
+                    setCurrentView("main-menu");
+                  } else {
+                    setCurrentView("browse-forms");
+                  }
+                }}
                 className="mb-6"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />

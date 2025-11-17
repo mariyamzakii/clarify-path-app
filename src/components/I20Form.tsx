@@ -79,13 +79,7 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">I-20 Form Request</h1>
-        <Button onClick={handleCheckForm} variant="outline" className="gap-2">
-          <CheckCircle className="w-4 h-4" />
-          Check My Form
-        </Button>
-      </div>
+      <h1 className="text-3xl font-bold">I-20 Form Request</h1>
       
       <FormHelper />
 
@@ -211,9 +205,15 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
             </div>
           </div>
 
-          <Button type="submit" size="lg" className="w-full">
-            Submit I-20 Request
-          </Button>
+          <div className="flex gap-3">
+            <Button onClick={handleCheckForm} variant="outline" className="gap-2 flex-1">
+              <CheckCircle className="w-4 h-4" />
+              Check Form
+            </Button>
+            <Button type="submit" size="lg" className="flex-1">
+              Submit I-20 Request
+            </Button>
+          </div>
         </Card>
       </form>
 
@@ -225,27 +225,15 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
         />
       )}
 
-      {/* Floating Help Button */}
-      <button
+      {/* Translation Help Button */}
+      <Button
         onClick={() => setShowChat(!showChat)}
-        className="fixed bottom-6 right-6 z-40 group"
+        variant="outline"
+        className="fixed bottom-6 right-6 z-40 gap-2 shadow-elegant hover:shadow-glow"
       >
-        <div className="relative">
-          <svg className="absolute -top-12 -right-8 w-32 h-16 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
-            <defs>
-              <path id="curve" d="M 10,40 Q 60,5 110,40" fill="transparent" />
-            </defs>
-            <text className="text-xs font-medium fill-primary">
-              <textPath href="#curve" startOffset="50%" textAnchor="middle">
-                Need help?
-              </textPath>
-            </text>
-          </svg>
-          <div className="bg-primary hover:bg-primary/90 text-primary-foreground p-4 rounded-full shadow-elegant hover:shadow-glow transition-all">
-            <MessageCircle className="w-6 h-6" />
-          </div>
-        </div>
-      </button>
+        Translation help?
+        <MessageCircle className="w-4 h-4" />
+      </Button>
     </div>
   );
 };

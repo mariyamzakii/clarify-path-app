@@ -14,7 +14,18 @@ import ChatBot from "@/components/ChatBot";
 import GenericForm from "@/components/GenericForm";
 import I20Form from "@/components/I20Form";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type View = "home" | "login" | "main-menu" | "browse-forms" | "upload" | "camera" | "progress" | "visa-form" | "bundle" | "fafsa-form" | "student-visa-form" | "i20-form" | "generic-form";
 
@@ -30,6 +41,10 @@ const Index = () => {
   const [inProgressDocs, setInProgressDocs] = useState<Array<{ id: string; name: string; status: string }>>([
     { id: "visa", name: "Visa Application", status: "In Progress" }
   ]);
+  const [showDocumentDialog, setShowDocumentDialog] = useState(false);
+  const [tempUploadedFile, setTempUploadedFile] = useState<File | null>(null);
+  const [showTranslateView, setShowTranslateView] = useState(false);
+  const [translateLanguage, setTranslateLanguage] = useState("en");
 
   const handleLogin = (email: string) => {
     const name = email.split("@")[0];
@@ -54,7 +69,20 @@ const Index = () => {
   };
 
   const handleFileSelect = (file: File) => {
-    setUploadedFile(file);
+    setTempUploadedFile(file);
+    setShowDocumentDialog(true);
+    setShowTranslateView(false);
+  };
+
+  const handleAddForm = () => {
+    setUploadedFile(tempUploadedFile);
+    setShowDocumentDialog(false);
+    setCurrentView("visa-form");
+  };
+
+  const handleJustTranslate = () => {
+    setShowDocumentDialog(false);
+    setShowTranslateView(true);
   };
 
   const handleCapture = (file: File) => {
@@ -183,18 +211,42 @@ const Index = () => {
             {currentView === "upload" && (
             <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
               <DocumentUploader onFileSelect={handleFileSelect} />
-              <LanguageSelector
-                selectedLanguage={selectedLanguage}
-                onLanguageChange={setSelectedLanguage}
-              />
-              {uploadedFile && (
-                <Button
-                  size="lg"
-                  onClick={() => setCurrentView("progress")}
-                  className="w-full bg-accent hover:bg-accent/90"
-                >
-                  Start Translation
-                </Button>
+              
+              <AlertDialog open={showDocumentDialog} onOpenChange={setShowDocumentDialog}>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Document Uploaded</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      It seems like you are trying to add a Visa form. Would you like to add this as a form to fill out, or just get a translation/explanation of what this form is?
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <Button onClick={handleJustTranslate} variant="outline">
+                      Just Translate
+                    </Button>
+                    <AlertDialogAction onClick={handleAddForm}>
+                      Add Form
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+              {showTranslateView && (
+                <Card className="p-6 bg-gradient-card border-border shadow-medium">
+                  <h3 className="text-xl font-semibold text-foreground mb-4">Visa Form Information</h3>
+                  <div className="mb-4">
+                    <LanguageSelector 
+                      selectedLanguage={translateLanguage}
+                      onLanguageChange={setTranslateLanguage}
+                    />
+                  </div>
+                  <div className="bg-muted p-4 rounded-lg">
+                    <p className="text-foreground leading-relaxed">
+                      A visa form is an official document required for entry into a country. It typically includes personal information, travel details, and the purpose of your visit. This form must be completed accurately and submitted along with supporting documents like your passport, photos, and proof of financial means. The visa application process varies by country and visa type (tourist, student, work, etc.).
+                    </p>
+                  </div>
+                </Card>
               )}
             </div>
           )}

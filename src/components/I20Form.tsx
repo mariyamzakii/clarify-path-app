@@ -88,7 +88,7 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Student Information</h2>
             
-            <div className={`space-y-2 ${highlightedField === 'fullName' ? 'p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400' : ''}`}>
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'fullName' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Full Name</Label>
               <Input 
                 placeholder="Enter full name" 
@@ -97,7 +97,7 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
               />
             </div>
 
-            <div className={`space-y-2 ${highlightedField === 'dateOfBirth' ? 'p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400' : ''}`}>
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'dateOfBirth' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Date of Birth</Label>
               <Input 
                 type="date" 
@@ -106,7 +106,7 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
               />
             </div>
 
-            <div className={`space-y-2 ${highlightedField === 'countryOfBirth' ? 'p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400' : ''}`}>
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'countryOfBirth' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Country of Birth</Label>
               <Input 
                 placeholder="Enter country" 
@@ -115,7 +115,7 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
               />
             </div>
 
-            <div className="space-y-2">
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'currentAddress' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Current Address</Label>
               <Input 
                 placeholder="Enter address" 
@@ -128,7 +128,7 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">School Information</h2>
             
-            <div className="space-y-2">
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'schoolName' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">School Name</Label>
               <Input 
                 placeholder="Enter school name" 
@@ -137,7 +137,7 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
               />
             </div>
 
-            <div className="space-y-2">
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'schoolAddress' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">School Address</Label>
               <Input 
                 placeholder="Enter school address" 
@@ -146,7 +146,7 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
               />
             </div>
 
-            <div className="space-y-2">
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'admissionDate' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Admission Letter Date</Label>
               <Input 
                 type="date" 
@@ -155,7 +155,7 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
               />
             </div>
 
-            <div className="space-y-2">
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'studentId' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Student ID Number</Label>
               <Input 
                 placeholder="Enter student ID" 
@@ -168,7 +168,7 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Program Details</h2>
             
-            <div className="space-y-2">
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'degreeLevel' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Degree Level</Label>
               <Input 
                 placeholder="e.g., Bachelor's, Master's" 
@@ -177,7 +177,7 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
               />
             </div>
 
-            <div className="space-y-2">
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'major' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Major/Field of Study</Label>
               <Input 
                 placeholder="Enter major" 
@@ -186,7 +186,7 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
               />
             </div>
 
-            <div className="space-y-2">
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'programStartDate' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Expected Program Start Date</Label>
               <Input 
                 type="date" 
@@ -195,7 +195,7 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
               />
             </div>
 
-            <div className="space-y-2">
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'programEndDate' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Expected Program End Date</Label>
               <Input 
                 type="date" 

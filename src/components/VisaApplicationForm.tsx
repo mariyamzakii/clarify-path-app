@@ -87,7 +87,7 @@ const VisaApplicationForm = ({ onSubmit }: VisaApplicationFormProps) => {
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Personal Information</h2>
             
-            <div className={`space-y-2 ${highlightedField === 'fullName' ? 'p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400' : ''}`}>
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'fullName' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">
                 Full Legal Name (as shown on passport)
               </Label>
@@ -101,7 +101,7 @@ const VisaApplicationForm = ({ onSubmit }: VisaApplicationFormProps) => {
               </p>
             </div>
 
-            <div className={`space-y-2 ${highlightedField === 'dateOfBirth' ? 'p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400' : ''}`}>
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'dateOfBirth' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Date of Birth</Label>
               <Input 
                 type="date" 
@@ -113,7 +113,7 @@ const VisaApplicationForm = ({ onSubmit }: VisaApplicationFormProps) => {
               </p>
             </div>
 
-            <div className={`space-y-2 ${highlightedField === 'placeOfBirth' ? 'p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400' : ''}`}>
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'placeOfBirth' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Place of Birth</Label>
               <Input 
                 placeholder="Enter place of birth" 
@@ -125,7 +125,7 @@ const VisaApplicationForm = ({ onSubmit }: VisaApplicationFormProps) => {
               </p>
             </div>
 
-            <div className={`space-y-2 ${highlightedField === 'nationality' ? 'p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400' : ''}`}>
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'nationality' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Nationality/Citizenship</Label>
               <Input 
                 placeholder="Enter nationality" 
@@ -141,7 +141,7 @@ const VisaApplicationForm = ({ onSubmit }: VisaApplicationFormProps) => {
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Travel Information</h2>
             
-            <div className={`space-y-2 ${highlightedField === 'purposeOfVisit' ? 'p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400' : ''}`}>
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'purposeOfVisit' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Purpose of Visit</Label>
               <Textarea 
                 placeholder="Enter purpose of visit" 
@@ -154,7 +154,7 @@ const VisaApplicationForm = ({ onSubmit }: VisaApplicationFormProps) => {
               </p>
             </div>
 
-            <div className={`space-y-2 ${highlightedField === 'durationOfStay' ? 'p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400' : ''}`}>
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'durationOfStay' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Intended Duration of Stay</Label>
               <Input 
                 type="number" 

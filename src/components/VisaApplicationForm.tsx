@@ -206,7 +206,7 @@ const VisaApplicationForm = ({ onSubmit }: VisaApplicationFormProps) => {
             </div>
 
           <div className="flex gap-3">
-            <Button onClick={handleCheckForm} variant="outline" className="gap-2 flex-1">
+            <Button type="button" onClick={handleCheckForm} variant="outline" className="gap-2 flex-1">
               <CheckCircle className="w-4 h-4" />
               Check Form
             </Button>

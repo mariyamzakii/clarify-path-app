@@ -113,47 +113,17 @@ const ChatBot = ({ selectedText = "", onClose, onHighlightField }: ChatBotProps)
       setMessages([userMessage]);
       
       setIsTyping(true);
-      fetchChat([userMessage])
-        .then((content) => {
-          setMessages([userMessage, { role: "assistant", content }]);
-        })
-        .catch(() => {
-          const fallback = getMockResponse(selectedText, language);
-          setMessages([userMessage, { role: "assistant", content: fallback }]);
-        })
-        .finally(() => setIsTyping(false));
+      
+      // Use hardcoded responses only (no AI calls)
+      const fallback = getMockResponse(selectedText, language);
+      setMessages([userMessage, { role: "assistant", content: fallback }]);
+      setIsTyping(false);
     }
   }, [selectedText, language]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages]);
-
-  const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
-
-  async function fetchChat(msgs: Message[]): Promise<string> {
-    try {
-      const resp = await fetch(CHAT_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({ messages: msgs, language }),
-      });
-      if (!resp.ok) {
-        const err = await resp.json().catch(() => ({} as any));
-        throw new Error((err as any)?.error || `Request failed (${resp.status})`);
-      }
-      const data = await resp.json();
-      const content = (data as any)?.choices?.[0]?.message?.content || (data as any)?.content;
-      if (!content) throw new Error("Empty response");
-      return content as string;
-    } catch (e) {
-      console.error("AI error:", e);
-      throw e;
-    }
-  }
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -167,15 +137,12 @@ const ChatBot = ({ selectedText = "", onClose, onHighlightField }: ChatBotProps)
     checkAndHighlightField(inputText);
 
     setIsTyping(true);
-    try {
-      const aiText = await fetchChat([...messages, userMessage]);
-      setMessages(prev => [...prev, { role: "assistant", content: aiText }]);
-    } catch {
-      const response = getMockResponse(inputText, language);
-      setMessages(prev => [...prev, { role: "assistant", content: response }]);
-    } finally {
-      setIsTyping(false);
-    }
+    
+    // Use hardcoded responses only (no AI calls)
+    const response = getMockResponse(inputText, language);
+    setMessages(prev => [...prev, { role: "assistant", content: response }]);
+    
+    setIsTyping(false);
   };
 
   const handleQuickTranslate = () => {

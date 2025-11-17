@@ -66,8 +66,113 @@ const ChatBot = ({ selectedText = "", onClose, onHighlightField }: ChatBotProps)
     }
   };
 
-  const getMockResponse = (query: string, lang: string): string => {
+  // Helper function to get field-specific responses
+  const getFieldResponse = (fieldText: string, lang: string, type: "meaning" | "example"): string => {
+    
+    // Full Name responses
+    if (fieldText.includes("full") && fieldText.includes("name") || fieldText.includes("legal name")) {
+      if (type === "meaning") {
+        const responses: Record<string, string> = {
+          en: "📝 **What is Full Legal Name?**\n\nThis is your complete name exactly as it appears on your passport or official government-issued ID. It must match your legal documents perfectly to avoid any issues with your application.",
+          es: "📝 **¿Qué es el Nombre Legal Completo?**\n\nEste es su nombre completo exactamente como aparece en su pasaporte o identificación oficial del gobierno. Debe coincidir perfectamente con sus documentos legales para evitar problemas con su solicitud.",
+          zh: "📝 **什么是完整法定姓名？**\n\n这是您护照或官方政府颁发的身份证件上显示的完整姓名。它必须与您的法律文件完全匹配，以避免申请出现任何问题。",
+          pt: "📝 **O que é Nome Legal Completo?**\n\nEste é o seu nome completo exatamente como aparece no seu passaporte ou documento oficial do governo. Deve corresponder perfeitamente aos seus documentos legais para evitar problemas com sua inscrição.",
+          fr: "📝 **Qu'est-ce que le Nom Légal Complet?**\n\nC'est votre nom complet exactement tel qu'il apparaît sur votre passeport ou pièce d'identité officielle. Il doit correspondre parfaitement à vos documents légaux pour éviter tout problème avec votre candidature.",
+          de: "📝 **Was ist der vollständige rechtliche Name?**\n\nDies ist Ihr vollständiger Name genau so, wie er in Ihrem Reisepass oder amtlichen Ausweis erscheint. Er muss perfekt mit Ihren Rechtsdokumenten übereinstimmen, um Probleme mit Ihrer Bewerbung zu vermeiden.",
+        };
+        return responses[lang] || responses.en;
+      } else {
+        const responses: Record<string, string> = {
+          en: "✍️ **How to fill Full Legal Name:**\n\nInclude all first names, middle names, and surnames in the exact order they appear on your passport.\n\n**Examples:**\n• María Elena García López\n• John Michael Smith Jr.\n• Wei Zhang\n• Jean-Pierre Dubois",
+          es: "✍️ **Cómo llenar el Nombre Legal Completo:**\n\nIncluya todos los nombres, segundos nombres y apellidos en el orden exacto en que aparecen en su pasaporte.\n\n**Ejemplos:**\n• María Elena García López\n• Juan Carlos Rodríguez Pérez\n• Ana Sofía Martínez",
+          zh: "✍️ **如何填写完整法定姓名：**\n\n按照护照上显示的确切顺序包括所有名字、中间名和姓氏。\n\n**示例：**\n• 张伟 (Zhang Wei)\n• 李明华 (Li Minghua)\n• 王小明 (Wang Xiaoming)",
+          pt: "✍️ **Como preencher o Nome Legal Completo:**\n\nInclua todos os primeiros nomes, nomes do meio e sobrenomes na ordem exata em que aparecem no seu passaporte.\n\n**Exemplos:**\n• João Silva Santos\n• Maria Fernanda Costa\n• Pedro Henrique Oliveira",
+          fr: "✍️ **Comment remplir le Nom Légal Complet:**\n\nIncluez tous les prénoms, deuxièmes prénoms et noms de famille dans l'ordre exact où ils apparaissent sur votre passeport.\n\n**Exemples:**\n• Jean-Pierre Dupont\n• Marie-Claire Lefebvre\n• François Bernard Martin",
+          de: "✍️ **Wie man den vollständigen rechtlichen Namen ausfüllt:**\n\nFügen Sie alle Vornamen, zweiten Vornamen und Nachnamen in der genauen Reihenfolge hinzu, wie sie in Ihrem Reisepass erscheinen.\n\n**Beispiele:**\n• Hans Michael Müller\n• Anna Maria Schmidt\n• Klaus-Peter Weber",
+        };
+        return responses[lang] || responses.en;
+      }
+    }
+
+    // Date of Birth responses
+    if (fieldText.includes("date") && fieldText.includes("birth") || fieldText.includes("birthday") || fieldText.includes("born")) {
+      if (type === "meaning") {
+        const responses: Record<string, string> = {
+          en: "📅 **What is Date of Birth?**\n\nYour birth date as recorded on your birth certificate and passport. This is used to verify your identity and age for the application.",
+          es: "📅 **¿Qué es la Fecha de Nacimiento?**\n\nSu fecha de nacimiento registrada en su certificado de nacimiento y pasaporte. Se usa para verificar su identidad y edad para la solicitud.",
+          zh: "📅 **什么是出生日期？**\n\n您的出生证明和护照上记录的出生日期。这用于验证您的身份和年龄。",
+          pt: "📅 **O que é Data de Nascimento?**\n\nSua data de nascimento conforme registrado em sua certidão de nascimento e passaporte. É usada para verificar sua identidade e idade para a inscrição.",
+          fr: "📅 **Qu'est-ce que la Date de Naissance?**\n\nVotre date de naissance telle qu'enregistrée sur votre acte de naissance et passeport. Elle est utilisée pour vérifier votre identité et votre âge pour la candidature.",
+          de: "📅 **Was ist das Geburtsdatum?**\n\nIhr Geburtsdatum wie auf Ihrer Geburtsurkunde und Ihrem Reisepass verzeichnet. Dies wird zur Überprüfung Ihrer Identität und Ihres Alters für die Bewerbung verwendet.",
+        };
+        return responses[lang] || responses.en;
+      } else {
+        const responses: Record<string, string> = {
+          en: "✍️ **How to fill Date of Birth:**\n\nUse the exact format requested by the form (check if it wants MM/DD/YYYY or DD/MM/YYYY).\n\n**Examples:**\n• March 15, 1995 → 03/15/1995 (US format)\n• March 15, 1995 → 15/03/1995 (European format)\n• December 1, 2000 → 12/01/2000 or 01/12/2000",
+          es: "✍️ **Cómo llenar la Fecha de Nacimiento:**\n\nUse el formato exacto solicitado por el formulario (verifique si requiere DD/MM/AAAA o MM/DD/AAAA).\n\n**Ejemplos:**\n• 15 de marzo de 1995 → 15/03/1995\n• 1 de diciembre de 2000 → 01/12/2000\n• 25 de julio de 1988 → 25/07/1988",
+          zh: "✍️ **如何填写出生日期：**\n\n使用表格要求的确切格式（检查是否需要DD/MM/YYYY或MM/DD/YYYY）。\n\n**示例：**\n• 1995年3月15日 → 15/03/1995\n• 2000年12月1日 → 01/12/2000",
+          pt: "✍️ **Como preencher a Data de Nascimento:**\n\nUse o formato exato solicitado pelo formulário (verifique se quer DD/MM/AAAA).\n\n**Exemplos:**\n• 15 de março de 1995 → 15/03/1995\n• 1 de dezembro de 2000 → 01/12/2000",
+          fr: "✍️ **Comment remplir la Date de Naissance:**\n\nUtilisez le format exact demandé par le formulaire (vérifiez s'il veut JJ/MM/AAAA).\n\n**Exemples:**\n• 15 mars 1995 → 15/03/1995\n• 1er décembre 2000 → 01/12/2000",
+          de: "✍️ **Wie man das Geburtsdatum ausfüllt:**\n\nVerwenden Sie das genaue vom Formular angeforderte Format (prüfen Sie, ob TT.MM.JJJJ gewünscht ist).\n\n**Beispiele:**\n• 15. März 1995 → 15.03.1995\n• 1. Dezember 2000 → 01.12.2000",
+        };
+        return responses[lang] || responses.en;
+      }
+    }
+
+    // Email responses
+    if (fieldText.includes("email")) {
+      if (type === "meaning") {
+        const responses: Record<string, string> = {
+          en: "📧 **What is Email Address?**\n\nYour active email address where you will receive important updates, notifications, and communications about your application. Make sure you check this email regularly.",
+          es: "📧 **¿Qué es la Dirección de Correo Electrónico?**\n\nSu dirección de correo electrónico activa donde recibirá actualizaciones importantes, notificaciones y comunicaciones sobre su solicitud. Asegúrese de revisar este correo regularmente.",
+          zh: "📧 **什么是电子邮件地址？**\n\n您的活跃电子邮件地址，您将在此接收有关申请的重要更新、通知和通信。确保您定期检查此电子邮件。",
+          pt: "📧 **O que é Endereço de Email?**\n\nSeu endereço de email ativo onde você receberá atualizações importantes, notificações e comunicações sobre sua inscrição. Certifique-se de verificar este email regularmente.",
+          fr: "📧 **Qu'est-ce que l'Adresse Email?**\n\nVotre adresse email active où vous recevrez des mises à jour importantes, des notifications et des communications concernant votre candidature. Assurez-vous de vérifier régulièrement cet email.",
+          de: "📧 **Was ist die E-Mail-Adresse?**\n\nIhre aktive E-Mail-Adresse, unter der Sie wichtige Updates, Benachrichtigungen und Mitteilungen zu Ihrer Bewerbung erhalten. Stellen Sie sicher, dass Sie diese E-Mail regelmäßig überprüfen.",
+        };
+        return responses[lang] || responses.en;
+      } else {
+        const responses: Record<string, string> = {
+          en: "✍️ **How to fill Email Address:**\n\nProvide a valid, active email that you check frequently.\n\n**Examples:**\n• maria.garcia@gmail.com\n• john.smith.work@outlook.com\n• student2024@university.edu\n• contact@myname.com",
+          es: "✍️ **Cómo llenar la Dirección de Correo Electrónico:**\n\nProporcione un correo electrónico válido y activo que revise frecuentemente.\n\n**Ejemplos:**\n• maria.garcia@gmail.com\n• juan.perez.trabajo@outlook.com\n• estudiante2024@universidad.edu",
+          zh: "✍️ **如何填写电子邮件地址：**\n\n提供您经常查看的有效、活跃的电子邮件。\n\n**示例：**\n• zhangsan@gmail.com\n• liming.work@outlook.com\n• student2024@university.edu",
+          pt: "✍️ **Como preencher o Endereço de Email:**\n\nForneça um email válido e ativo que você verifica frequentemente.\n\n**Exemplos:**\n• maria.silva@gmail.com\n• joao.santos.trabalho@outlook.com\n• estudante2024@universidade.edu",
+          fr: "✍️ **Comment remplir l'Adresse Email:**\n\nFournissez un email valide et actif que vous vérifiez fréquemment.\n\n**Exemples:**\n• marie.dupont@gmail.com\n• jean.martin.travail@outlook.com\n• etudiant2024@universite.edu",
+          de: "✍️ **Wie man die E-Mail-Adresse ausfüllt:**\n\nGeben Sie eine gültige, aktive E-Mail an, die Sie häufig überprüfen.\n\n**Beispiele:**\n• maria.mueller@gmail.com\n• hans.schmidt.arbeit@outlook.com\n• student2024@universitaet.de",
+        };
+        return responses[lang] || responses.en;
+      }
+    }
+
+    // Default response for unknown fields
+    const responses: Record<string, string> = {
+      en: `I can help you understand "${fieldText}"! Try asking:\n• "What does this mean?"\n• "How should I fill this out?"`,
+      es: `¡Puedo ayudarte a entender "${fieldText}"! Intenta preguntar:\n• "¿Qué significa esto?"\n• "¿Cómo debo llenarlo?"`,
+      zh: `我可以帮助您理解"${fieldText}"！尝试询问：\n• "这是什么意思？"\n• "我应该如何填写？"`,
+      pt: `Posso ajudá-lo a entender "${fieldText}"! Tente perguntar:\n• "O que isso significa?"\n• "Como devo preencher?"`,
+      fr: `Je peux vous aider à comprendre "${fieldText}"! Essayez de demander:\n• "Qu'est-ce que cela signifie?"\n• "Comment dois-je le remplir?"`,
+      de: `Ich kann Ihnen helfen, "${fieldText}" zu verstehen! Versuchen Sie zu fragen:\n• "Was bedeutet das?"\n• "Wie soll ich das ausfüllen?"`,
+    };
+    return responses[lang] || responses.en;
+  };
+
+  const getMockResponse = (query: string, lang: string, selectedFieldText?: string): string => {
     const lowerQuery = query.toLowerCase();
+    
+    // Check if user is asking "what does this mean" or "how to fill" about the selected field
+    const isAskingMeaning = lowerQuery.includes("what") || lowerQuery.includes("mean") || lowerQuery.includes("qué") || lowerQuery.includes("significa") || lowerQuery.includes("que significa");
+    const isAskingExample = lowerQuery.includes("how") || lowerQuery.includes("fill") || lowerQuery.includes("look") || lowerQuery.includes("example") || lowerQuery.includes("cómo") || lowerQuery.includes("llenar") || lowerQuery.includes("ejemplo");
+    
+    // If we have selectedFieldText context and user is asking about it
+    if (selectedFieldText && (isAskingMeaning || isAskingExample)) {
+      const fieldLower = selectedFieldText.toLowerCase();
+      
+      // Determine which type of response to give
+      const responseType = isAskingExample ? "example" : "meaning";
+      
+      // Return field-specific response based on what was selected
+      return getFieldResponse(fieldLower, lang, responseType);
+    }
     
     // Check if it's a form review response
     if (lowerQuery.includes("based on your form") || lowerQuery.includes("name:")) {
@@ -283,15 +388,24 @@ const ChatBot = ({ selectedText = "", onClose, onHighlightField }: ChatBotProps)
 
   useEffect(() => {
     if (selectedText && selectedText.trim()) {
-      const userMessage: Message = { role: "user", content: selectedText };
-      setMessages([userMessage]);
+      // When text is selected, show it as context and ask how to help
+      const greetings: Record<string, string> = {
+        en: `You selected: "${selectedText}"\n\nDo you need help with this? How can I help?\n\n💡 You can ask:\n• "What does this mean?"\n• "How should I fill this out?"\n• "Give me examples"`,
+        es: `Seleccionaste: "${selectedText}"\n\n¿Necesitas ayuda con esto? ¿Cómo puedo ayudarte?\n\n💡 Puedes preguntar:\n• "¿Qué significa esto?"\n• "¿Cómo debo llenarlo?"\n• "Dame ejemplos"`,
+        zh: `您选择了："${selectedText}"\n\n您需要帮助吗？我能帮您什么？\n\n💡 您可以问：\n• "这是什么意思？"\n• "我应该如何填写？"\n• "给我一些例子"`,
+        pt: `Você selecionou: "${selectedText}"\n\nPrecisa de ajuda com isso? Como posso ajudar?\n\n💡 Você pode perguntar:\n• "O que isso significa?"\n• "Como devo preencher?"\n• "Me dê exemplos"`,
+        fr: `Vous avez sélectionné: "${selectedText}"\n\nAvez-vous besoin d'aide? Comment puis-je vous aider?\n\n💡 Vous pouvez demander:\n• "Qu'est-ce que cela signifie?"\n• "Comment dois-je le remplir?"\n• "Donnez-moi des exemples"`,
+        de: `Sie haben ausgewählt: "${selectedText}"\n\nBenötigen Sie Hilfe? Wie kann ich helfen?\n\n💡 Sie können fragen:\n• "Was bedeutet das?"\n• "Wie soll ich das ausfüllen?"\n• "Geben Sie mir Beispiele"`,
+        ar: `لقد اخترت: "${selectedText}"\n\nهل تحتاج مساعدة في هذا؟ كيف يمكنني المساعدة؟\n\n💡 يمكنك أن تسأل:\n• "ماذا يعني هذا؟"\n• "كيف يجب أن أملأ هذا؟"\n• "أعطني أمثلة"`,
+        hi: `आपने चुना: "${selectedText}"\n\nक्या आपको इसमें मदद चाहिए? मैं कैसे मदद कर सकता हूँ?\n\n💡 आप पूछ सकते हैं:\n• "इसका क्या मतलब है?"\n• "मुझे इसे कैसे भरना चाहिए?"\n• "मुझे उदाहरण दें"`,
+      };
       
-      setIsTyping(true);
+      const assistantMessage: Message = { 
+        role: "assistant", 
+        content: greetings[language] || greetings.en 
+      };
       
-      // Use hardcoded responses only (no AI calls)
-      const fallback = getMockResponse(selectedText, language);
-      setMessages([userMessage, { role: "assistant", content: fallback }]);
-      setIsTyping(false);
+      setMessages([assistantMessage]);
     }
   }, [selectedText, language]);
 
@@ -313,7 +427,8 @@ const ChatBot = ({ selectedText = "", onClose, onHighlightField }: ChatBotProps)
     setIsTyping(true);
     
     // Use hardcoded responses only (no AI calls)
-    const response = getMockResponse(inputText, language);
+    // Pass the selectedText context so it knows what field we're talking about
+    const response = getMockResponse(inputText, language, selectedText);
     setMessages(prev => [...prev, { role: "assistant", content: response }]);
     
     setIsTyping(false);

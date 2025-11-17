@@ -47,7 +47,7 @@ const Index = () => {
   const [showTranslateView, setShowTranslateView] = useState(false);
   const [translateLanguage, setTranslateLanguage] = useState("en");
   const [translatedText, setTranslatedText] = useState("");
-  const [isTranslating, setIsTranslating] = useState(false);
+  
 
   const handleLogin = (email: string) => {
     const name = email.split("@")[0];
@@ -83,37 +83,25 @@ const Index = () => {
     setCurrentView("visa-form");
   };
 
-  const handleJustTranslate = async () => {
-    setShowDocumentDialog(false);
-    setShowTranslateView(true);
-    await fetchTranslation(translateLanguage);
+  const getVisaExplanation = (language: string): string => {
+    const explanations: Record<string, string> = {
+      en: "A visa form is an official document required for entry into a country. It typically includes personal information, travel details, and the purpose of your visit. This form must be completed accurately and submitted along with supporting documents like your passport, photos, and proof of financial means. The visa application process varies by country and visa type (tourist, student, work, etc.).",
+      es: "Un formulario de visa es un documento oficial requerido para ingresar a un país. Generalmente incluye información personal, detalles del viaje y el propósito de su visita. Este formulario debe completarse con precisión y presentarse junto con documentos de respaldo como su pasaporte, fotos y comprobante de medios financieros. El proceso de solicitud de visa varía según el país y el tipo de visa (turista, estudiante, trabajo, etc.).",
+      zh: "签证表格是进入一个国家所需的官方文件。它通常包括个人信息、旅行详情和访问目的。此表格必须准确填写，并与护照、照片和财务证明等支持文件一起提交。签证申请流程因国家和签证类型（旅游、学生、工作等）而异。",
+      ar: "نموذج التأشيرة هو وثيقة رسمية مطلوبة للدخول إلى بلد ما. يتضمن عادةً معلومات شخصية وتفاصيل السفر والغرض من زيارتك. يجب ملء هذا النموذج بدقة وتقديمه مع المستندات الداعمة مثل جواز سفرك والصور وإثبات الوسائل المالية. تختلف عملية طلب التأشيرة حسب البلد ونوع التأشيرة (سياحية، طالب، عمل، إلخ).",
+      hi: "वीज़ा फॉर्म किसी देश में प्रवेश के लिए आवश्यक एक आधिकारिक दस्तावेज़ है। इसमें आम तौर पर व्यक्तिगत जानकारी, यात्रा विवरण और आपकी यात्रा का उद्देश्य शामिल होता है। यह फॉर्म सटीक रूप से पूरा किया जाना चाहिए और आपके पासपोर्ट, फोटो और वित्तीय साधनों के प्रमाण जैसे सहायक दस्तावेजों के साथ जमा किया जाना चाहिए। वीज़ा आवेदन प्रक्रिया देश और वीज़ा प्रकार (पर्यटक, छात्र, कार्य, आदि) के अनुसार भिन्न होती है।",
+      pt: "Um formulário de visto é um documento oficial necessário para entrada em um país. Geralmente inclui informações pessoais, detalhes de viagem e o propósito da sua visita. Este formulário deve ser preenchido com precisão e enviado junto com documentos de apoio como seu passaporte, fotos e comprovante de meios financeiros. O processo de solicitação de visto varia de acordo com o país e tipo de visto (turista, estudante, trabalho, etc.).",
+      fr: "Un formulaire de visa est un document officiel requis pour l'entrée dans un pays. Il comprend généralement des informations personnelles, des détails de voyage et le but de votre visite. Ce formulaire doit être rempli avec précision et soumis avec des documents justificatifs tels que votre passeport, des photos et une preuve de moyens financiers. Le processus de demande de visa varie selon le pays et le type de visa (touriste, étudiant, travail, etc.).",
+      de: "Ein Visumsformular ist ein offizielles Dokument, das für die Einreise in ein Land erforderlich ist. Es enthält normalerweise persönliche Informationen, Reisedetails und den Zweck Ihres Besuchs. Dieses Formular muss genau ausgefüllt und zusammen mit unterstützenden Dokumenten wie Ihrem Reisepass, Fotos und Nachweis finanzieller Mittel eingereicht werden. Der Visumsantragsprozess variiert je nach Land und Visumstyp (Tourist, Student, Arbeit usw.).",
+    };
+    
+    return explanations[language] || explanations.en;
   };
 
-  const fetchTranslation = async (language: string) => {
-    setIsTranslating(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('chat', {
-        body: {
-          messages: [
-            {
-              role: 'user',
-              content: 'Explain what a visa form is, including what information it typically requires, the purpose, and the general application process. Keep it concise in 3-4 sentences.'
-            }
-          ],
-          language: language
-        }
-      });
-
-      if (error) throw error;
-      
-      const content = data?.choices?.[0]?.message?.content || "A visa form is an official document required for entry into a country. It typically includes personal information, travel details, and the purpose of your visit. This form must be completed accurately and submitted along with supporting documents like your passport, photos, and proof of financial means. The visa application process varies by country and visa type (tourist, student, work, etc.).";
-      setTranslatedText(content);
-    } catch (error) {
-      console.error('Translation error:', error);
-      setTranslatedText("A visa form is an official document required for entry into a country. It typically includes personal information, travel details, and the purpose of your visit. This form must be completed accurately and submitted along with supporting documents like your passport, photos, and proof of financial means. The visa application process varies by country and visa type (tourist, student, work, etc.).");
-    } finally {
-      setIsTranslating(false);
-    }
+  const handleJustTranslate = () => {
+    setShowDocumentDialog(false);
+    setShowTranslateView(true);
+    setTranslatedText(getVisaExplanation(translateLanguage));
   };
 
   const handleCapture = (file: File) => {
@@ -271,13 +259,13 @@ const Index = () => {
                       selectedLanguage={translateLanguage}
                       onLanguageChange={(lang) => {
                         setTranslateLanguage(lang);
-                        fetchTranslation(lang);
+                        setTranslatedText(getVisaExplanation(lang));
                       }}
                     />
                   </div>
                   <div className="bg-muted p-4 rounded-lg">
                     <p className="text-foreground leading-relaxed">
-                      {isTranslating ? "Translating..." : translatedText}
+                      {translatedText}
                     </p>
                   </div>
                 </Card>

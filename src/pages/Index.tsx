@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import Hero from "@/components/Hero";
 import LoginForm from "@/components/LoginForm";
 import Header from "@/components/Header";
@@ -45,6 +46,8 @@ const Index = () => {
   const [tempUploadedFile, setTempUploadedFile] = useState<File | null>(null);
   const [showTranslateView, setShowTranslateView] = useState(false);
   const [translateLanguage, setTranslateLanguage] = useState("en");
+  const [translatedText, setTranslatedText] = useState("");
+  const [isTranslating, setIsTranslating] = useState(false);
 
   const handleLogin = (email: string) => {
     const name = email.split("@")[0];
@@ -80,9 +83,37 @@ const Index = () => {
     setCurrentView("visa-form");
   };
 
-  const handleJustTranslate = () => {
+  const handleJustTranslate = async () => {
     setShowDocumentDialog(false);
     setShowTranslateView(true);
+    await fetchTranslation(translateLanguage);
+  };
+
+  const fetchTranslation = async (language: string) => {
+    setIsTranslating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('chat', {
+        body: {
+          messages: [
+            {
+              role: 'user',
+              content: 'Explain what a visa form is, including what information it typically requires, the purpose, and the general application process. Keep it concise in 3-4 sentences.'
+            }
+          ],
+          language: language
+        }
+      });
+
+      if (error) throw error;
+      
+      const content = data?.choices?.[0]?.message?.content || "A visa form is an official document required for entry into a country. It typically includes personal information, travel details, and the purpose of your visit. This form must be completed accurately and submitted along with supporting documents like your passport, photos, and proof of financial means. The visa application process varies by country and visa type (tourist, student, work, etc.).";
+      setTranslatedText(content);
+    } catch (error) {
+      console.error('Translation error:', error);
+      setTranslatedText("A visa form is an official document required for entry into a country. It typically includes personal information, travel details, and the purpose of your visit. This form must be completed accurately and submitted along with supporting documents like your passport, photos, and proof of financial means. The visa application process varies by country and visa type (tourist, student, work, etc.).");
+    } finally {
+      setIsTranslating(false);
+    }
   };
 
   const handleCapture = (file: File) => {
@@ -238,12 +269,15 @@ const Index = () => {
                   <div className="mb-4">
                     <LanguageSelector 
                       selectedLanguage={translateLanguage}
-                      onLanguageChange={setTranslateLanguage}
+                      onLanguageChange={(lang) => {
+                        setTranslateLanguage(lang);
+                        fetchTranslation(lang);
+                      }}
                     />
                   </div>
                   <div className="bg-muted p-4 rounded-lg">
                     <p className="text-foreground leading-relaxed">
-                      A visa form is an official document required for entry into a country. It typically includes personal information, travel details, and the purpose of your visit. This form must be completed accurately and submitted along with supporting documents like your passport, photos, and proof of financial means. The visa application process varies by country and visa type (tourist, student, work, etc.).
+                      {isTranslating ? "Translating..." : translatedText}
                     </p>
                   </div>
                 </Card>

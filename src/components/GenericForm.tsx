@@ -82,7 +82,7 @@ const GenericForm = ({ formName, formType, onSubmit }: GenericFormProps) => {
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Personal Information</h2>
             
-            <div className={`space-y-2 ${highlightedField === 'fullName' ? 'p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400' : ''}`}>
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'fullName' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Full Name</Label>
               <Input 
                 placeholder="Enter full name" 
@@ -91,7 +91,7 @@ const GenericForm = ({ formName, formType, onSubmit }: GenericFormProps) => {
               />
             </div>
 
-            <div className={`space-y-2 ${highlightedField === 'dateOfBirth' ? 'p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400' : ''}`}>
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'dateOfBirth' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Date of Birth</Label>
               <Input 
                 type="date" 
@@ -100,7 +100,7 @@ const GenericForm = ({ formName, formType, onSubmit }: GenericFormProps) => {
               />
             </div>
 
-            <div className={`space-y-2 ${highlightedField === 'email' ? 'p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400' : ''}`}>
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'email' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Email Address</Label>
               <Input 
                 type="email"
@@ -110,7 +110,7 @@ const GenericForm = ({ formName, formType, onSubmit }: GenericFormProps) => {
               />
             </div>
 
-            <div className={`space-y-2 ${highlightedField === 'phone' ? 'p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400' : ''}`}>
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'phone' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Phone Number</Label>
               <Input 
                 type="tel"
@@ -120,7 +120,7 @@ const GenericForm = ({ formName, formType, onSubmit }: GenericFormProps) => {
               />
             </div>
 
-            <div className={`space-y-2 ${highlightedField === 'address' ? 'p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg border-2 border-yellow-400' : ''}`}>
+            <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'address' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">Address</Label>
               <Textarea 
                 placeholder="Enter full address" 

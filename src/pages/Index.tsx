@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import Hero from "@/components/Hero";
 import LoginForm from "@/components/LoginForm";
 import Header from "@/components/Header";

@@ -257,7 +257,21 @@ const Index = () => {
             {currentView === "i20-form" && (
               <div className="animate-fade-in">
                 <I20Form 
-                  onSubmit={() => setCurrentView("browse-forms")}
+                  onSubmit={() => {
+                    // Mark i-20 as complete
+                    setInProgressDocs(prev => prev.map(doc => 
+                      doc.id === 'i-20' 
+                        ? { ...doc, status: 'Complete' }
+                        : doc
+                    ));
+                    // Mark student-package-bundle as complete
+                    setInProgressDocs(prev => prev.map(doc => 
+                      doc.id === 'student-package-bundle' 
+                        ? { ...doc, status: 'Complete!' }
+                        : doc
+                    ));
+                    setCurrentView("browse-forms");
+                  }}
                 />
               </div>
             )}

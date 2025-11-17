@@ -164,8 +164,7 @@ const GenericForm = ({ formName, formType, onSubmit }: GenericFormProps) => {
       {/* Translation Help Button */}
       <Button
         onClick={() => setShowChat(!showChat)}
-        variant="outline"
-        className="fixed bottom-6 right-6 z-40 gap-2 shadow-elegant hover:shadow-glow"
+        className="fixed bottom-6 right-6 z-40 gap-2 shadow-elegant hover:shadow-glow bg-primary text-primary-foreground hover:bg-primary/90"
       >
         Translation help?
         <MessageCircle className="w-4 h-4" />

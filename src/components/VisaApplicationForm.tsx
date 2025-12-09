@@ -89,12 +89,13 @@ const VisaApplicationForm = ({ onSubmit }: VisaApplicationFormProps) => {
             
             <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'fullName' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
               <Label className="cursor-text select-text">
-                Full Legal Name (as shown on passport)
+                Full Legal Name (as shown on passport) <span className="text-destructive">*</span>
               </Label>
               <Input 
                 placeholder="Enter full name" 
                 value={formData.fullName}
                 onChange={(e) => handleFieldUpdate('fullName', e.target.value)}
+                required
               />
               <p className="text-sm text-muted-foreground select-text">
                 This must match exactly with your passport. Include all names in the order they appear.
@@ -102,11 +103,12 @@ const VisaApplicationForm = ({ onSubmit }: VisaApplicationFormProps) => {
             </div>
 
             <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'dateOfBirth' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
-              <Label className="cursor-text select-text">Date of Birth</Label>
+              <Label className="cursor-text select-text">Date of Birth <span className="text-destructive">*</span></Label>
               <Input 
                 type="date" 
                 value={formData.dateOfBirth}
                 onChange={(e) => handleFieldUpdate('dateOfBirth', e.target.value)}
+                required
               />
               <p className="text-sm text-muted-foreground select-text">
                 Enter your date of birth as shown on your passport or birth certificate.
@@ -126,11 +128,12 @@ const VisaApplicationForm = ({ onSubmit }: VisaApplicationFormProps) => {
             </div>
 
             <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'nationality' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
-              <Label className="cursor-text select-text">Nationality/Citizenship</Label>
+              <Label className="cursor-text select-text">Nationality/Citizenship <span className="text-destructive">*</span></Label>
               <Input 
                 placeholder="Enter nationality" 
                 value={formData.nationality}
                 onChange={(e) => handleFieldUpdate('nationality', e.target.value)}
+                required
               />
               <p className="text-sm text-muted-foreground select-text">
                 List all countries where you hold citizenship.
@@ -142,11 +145,12 @@ const VisaApplicationForm = ({ onSubmit }: VisaApplicationFormProps) => {
             <h2 className="text-xl font-semibold">Travel Information</h2>
             
             <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'purposeOfVisit' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
-              <Label className="cursor-text select-text">Purpose of Visit</Label>
+              <Label className="cursor-text select-text">Purpose of Visit <span className="text-destructive">*</span></Label>
               <Textarea 
                 placeholder="Enter purpose of visit" 
                 value={formData.purposeOfVisit}
                 onChange={(e) => handleFieldUpdate('purposeOfVisit', e.target.value)}
+                required
               />
               <p className="text-sm text-muted-foreground select-text">
                 Clearly state why you are traveling. Common purposes include tourism, business meetings, 
@@ -155,12 +159,13 @@ const VisaApplicationForm = ({ onSubmit }: VisaApplicationFormProps) => {
             </div>
 
             <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'durationOfStay' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
-              <Label className="cursor-text select-text">Intended Duration of Stay</Label>
+              <Label className="cursor-text select-text">Intended Duration of Stay <span className="text-destructive">*</span></Label>
               <Input 
                 type="number" 
                 placeholder="Number of days" 
                 value={formData.durationOfStay}
                 onChange={(e) => handleFieldUpdate('durationOfStay', e.target.value)}
+                required
               />
               <p className="text-sm text-muted-foreground select-text">
                 Specify how many days you plan to stay in the destination country.

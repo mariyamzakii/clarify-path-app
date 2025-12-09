@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { X, Send, MessageSquare, Sparkles } from "lucide-react";
+import { X, Send, MessageSquare, Sparkles, Loader2 } from "lucide-react";
 
 interface Message {
   role: "user" | "assistant";
@@ -425,6 +425,9 @@ const ChatBot = ({ selectedText = "", onClose, onHighlightField }: ChatBotProps)
     checkAndHighlightField(inputText);
 
     setIsTyping(true);
+    
+    // Simulate thinking delay for better UX
+    await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 400));
     
     // Use hardcoded responses only (no AI calls)
     // Pass the selectedText context so it knows what field we're talking about

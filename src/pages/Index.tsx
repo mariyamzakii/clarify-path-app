@@ -153,6 +153,15 @@ const Index = () => {
     setInProgressDocs(prev => prev.filter(doc => doc.id !== docId));
   };
 
+  const handleStartOver = (docId: string) => {
+    // Reset the document status back to "Not Started"
+    setInProgressDocs(prev => prev.map(doc => 
+      doc.id === docId 
+        ? { ...doc, status: "Not Started" }
+        : doc
+    ));
+  };
+
   const handleBundleSelect = (bundleType: string) => {
     setSelectedBundle(bundleType);
     
@@ -223,6 +232,7 @@ const Index = () => {
           onBundleSelect={handleBundleSelect}
           inProgressDocs={inProgressDocs}
           onDeleteDoc={handleDeleteDoc}
+          onStartOver={handleStartOver}
         />
       )}
 

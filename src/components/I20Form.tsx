@@ -89,20 +89,22 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
             <h2 className="text-xl font-semibold">Student Information</h2>
             
             <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'fullName' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
-              <Label className="cursor-text select-text">Full Name</Label>
+              <Label className="cursor-text select-text">Full Name <span className="text-destructive">*</span></Label>
               <Input 
                 placeholder="Enter full name" 
                 value={formData.fullName}
                 onChange={(e) => handleFieldUpdate('fullName', e.target.value)}
+                required
               />
             </div>
 
             <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'dateOfBirth' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
-              <Label className="cursor-text select-text">Date of Birth</Label>
+              <Label className="cursor-text select-text">Date of Birth <span className="text-destructive">*</span></Label>
               <Input 
                 type="date" 
                 value={formData.dateOfBirth}
                 onChange={(e) => handleFieldUpdate('dateOfBirth', e.target.value)}
+                required
               />
             </div>
 
@@ -129,11 +131,12 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
             <h2 className="text-xl font-semibold">School Information</h2>
             
             <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'schoolName' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
-              <Label className="cursor-text select-text">School Name</Label>
+              <Label className="cursor-text select-text">School Name <span className="text-destructive">*</span></Label>
               <Input 
                 placeholder="Enter school name" 
                 value={formData.schoolName}
                 onChange={(e) => handleFieldUpdate('schoolName', e.target.value)}
+                required
               />
             </div>
 
@@ -169,20 +172,22 @@ const I20Form = ({ onSubmit }: I20FormProps) => {
             <h2 className="text-xl font-semibold">Program Details</h2>
             
             <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'degreeLevel' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
-              <Label className="cursor-text select-text">Degree Level</Label>
+              <Label className="cursor-text select-text">Degree Level <span className="text-destructive">*</span></Label>
               <Input 
                 placeholder="e.g., Bachelor's, Master's" 
                 value={formData.degreeLevel}
                 onChange={(e) => handleFieldUpdate('degreeLevel', e.target.value)}
+                required
               />
             </div>
 
             <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'major' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
-              <Label className="cursor-text select-text">Major/Field of Study</Label>
+              <Label className="cursor-text select-text">Major/Field of Study <span className="text-destructive">*</span></Label>
               <Input 
                 placeholder="Enter major" 
                 value={formData.major}
                 onChange={(e) => handleFieldUpdate('major', e.target.value)}
+                required
               />
             </div>
 

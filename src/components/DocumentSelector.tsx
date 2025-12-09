@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FolderOpen, CheckCircle2, Circle, ChevronDown, ChevronRight, Trash2, FileText } from "lucide-react";
+import { FolderOpen, CheckCircle2, Circle, ChevronDown, ChevronRight, Trash2, FileText, RotateCcw } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface DocumentSelectorProps {
@@ -11,6 +11,7 @@ interface DocumentSelectorProps {
   onBundleSelect: (bundleType: string) => void;
   inProgressDocs: Array<{ id: string; name: string; status: string }>;
   onDeleteDoc: (docId: string) => void;
+  onStartOver?: (docId: string) => void;
 }
 
 const DocumentSelector = ({
@@ -20,6 +21,7 @@ const DocumentSelector = ({
   onBundleSelect,
   inProgressDocs,
   onDeleteDoc,
+  onStartOver,
 }: DocumentSelectorProps) => {
   const [openBundles, setOpenBundles] = useState<Record<string, boolean>>({});
   const [hoveredDoc, setHoveredDoc] = useState<string | null>(null);
@@ -219,17 +221,33 @@ const DocumentSelector = ({
                           {status.text}
                         </span>
                         {hoveredDoc === doc.id && (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-destructive hover:bg-destructive/10"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onDeleteDoc(doc.id);
-                            }}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
+                          <>
+                            {onStartOver && progress > 0 && (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 text-amber-600 hover:bg-amber-500/10"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onStartOver(doc.id);
+                                }}
+                                title="Start Over"
+                              >
+                                <RotateCcw className="w-4 h-4" />
+                              </Button>
+                            )}
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-destructive hover:bg-destructive/10"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onDeleteDoc(doc.id);
+                              }}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </>
                         )}
                       </div>
                     </div>

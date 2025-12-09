@@ -83,30 +83,33 @@ const GenericForm = ({ formName, formType, onSubmit }: GenericFormProps) => {
             <h2 className="text-xl font-semibold">Personal Information</h2>
             
             <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'fullName' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
-              <Label className="cursor-text select-text">Full Name</Label>
+              <Label className="cursor-text select-text">Full Name <span className="text-destructive">*</span></Label>
               <Input 
                 placeholder="Enter full name" 
                 value={formData.fullName}
                 onChange={(e) => handleFieldUpdate('fullName', e.target.value)}
+                required
               />
             </div>
 
             <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'dateOfBirth' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
-              <Label className="cursor-text select-text">Date of Birth</Label>
+              <Label className="cursor-text select-text">Date of Birth <span className="text-destructive">*</span></Label>
               <Input 
                 type="date" 
                 value={formData.dateOfBirth}
                 onChange={(e) => handleFieldUpdate('dateOfBirth', e.target.value)}
+                required
               />
             </div>
 
             <div className={`space-y-2 transition-all duration-300 ${highlightedField === 'email' ? 'p-3 bg-accent/30 rounded-lg border-2 border-primary shadow-lg' : ''}`}>
-              <Label className="cursor-text select-text">Email Address</Label>
+              <Label className="cursor-text select-text">Email Address <span className="text-destructive">*</span></Label>
               <Input 
                 type="email"
                 placeholder="Enter email address" 
                 value={formData.email}
                 onChange={(e) => handleFieldUpdate('email', e.target.value)}
+                required
               />
             </div>
 
